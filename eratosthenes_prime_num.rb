@@ -1,3 +1,4 @@
+# エトラステネスの篩
 class PrimeNum
 @@max_num = 5000
 
