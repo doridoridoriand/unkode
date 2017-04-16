@@ -12,7 +12,7 @@ while true do
     uuid = SecureRandom.uuid
     client.query("insert into uuid.ruby (`uuid`) values ('#{uuid}')")
     puts uuid
-    sleep(1)
+    #sleep(1)
   rescue => e
     p e
   end
