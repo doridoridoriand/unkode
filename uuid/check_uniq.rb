@@ -11,12 +11,14 @@ client = Mysql2::Client.new(:host => 'uuid.c9pxhxbdcuca.ap-northeast-1.rds.amazo
 
 data = client.query("select uuid from uuid.ruby").map {|row| row['uuid']}.to_a
 
+p data.length
+p data.uniq.length
 if data.length != data.uniq.length
   text = 'UUID collision occuerd!!!!'
 else
-  text = '今日もUUIDは平和です'
+  text = "生成されたUUID: #{data.length.to_s}\n今日もUUIDは平和です"
 end
-
+puts text
 uri = URI.parse('')
 https = Net::HTTP.new(uri.host, uri.port)
 https.use_ssl = true
