@@ -1,6 +1,5 @@
 let uuid = require('node-uuid');
 let mysql = require('mysql');
-console.log(uuid.v4());
 
 let connect = mysql.createConnection({
     host: 'uuid.c9pxhxbdcuca.ap-northeast-1.rds.amazonaws.com',
@@ -10,6 +9,9 @@ let connect = mysql.createConnection({
 
 connect.connect();
 
-connect.query('select * from uuid.ruby limit 10', function(error, results, fields) {
-    console.log(results);
-})
+while (true) {
+    let sql = 'insert into uuid.node (`uuid`) values ' + '"' + uuid.v4() + '"';
+    connect.query(sql, function(error, results, fields) {
+        console.log(results);
+    })
+}
