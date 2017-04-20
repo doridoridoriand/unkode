@@ -9,7 +9,7 @@ client = Mysql2::Client.new(:host => 'uuid.c9pxhxbdcuca.ap-northeast-1.rds.amazo
 
 while true do
   begin
-    uuid = SecureRandom.hex(31)
+    uuid = SecureRandom.hex(16)
     client.query("insert into uuid.ruby_hex (`uuid`) values ('#{uuid}')")
     puts uuid
   rescue => e
