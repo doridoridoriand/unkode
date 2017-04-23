@@ -4,15 +4,6 @@ require 'uri'
 require 'json'
 require 'parallel'
 
-#t_start = Time.now
-#numbers = (0..1000000).to_a
-#rand = Random.new()
-#Parallel.each(numbers, in_thread: 8) do |num|
-#  num + rand.rand(200)
-#end
-#t_end = Time.now
-#
-#p t_end - t_start
 client = Mysql2::Client.new(:host => '',
                             :username => 'root',
                             :password => 'password',
@@ -26,7 +17,7 @@ collision_uuid = []
 
 Parallel.each(index_arr, in_thread: 8) do |id|
   uuid = client.query("select uuid from uuid.ruby where id = #{id}").map {|res| res['uuid']}.first
-  count = client.query("select * from uuid.ruby where uuid = #{"'" + uuid + "'"}").map {|res| res['id']}.to_a.count
+  count = client.query("select * from uuid.ruby where uuid = #{"'" + uuid + "'"}").map {|res| res['uuid']}.to_a.count
 
   if count.to_i === 1
     p "#{uuid}: is unique"
