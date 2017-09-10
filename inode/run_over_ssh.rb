@@ -1,5 +1,5 @@
 require 'net/ssh'
-require 'uuid'
+require 'securerandom'
 require 'pry'
 require 'logger'
 
