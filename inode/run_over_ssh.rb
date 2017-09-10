@@ -3,8 +3,8 @@ require 'uuid'
 require 'pry'
 require 'logger'
 
-host = 'dorian1g'
-user = 'dorian'
+host = 'ec2-54-183-83-109.us-west-1.compute.amazonaws.com'
+user = 'ubuntu'
 
 logger = Logger.new('res.log')
 
@@ -20,9 +20,9 @@ Net::SSH.start(host, user) do |session|
       session.exec!("touch #{filename_with_path}")
       if j % 10 == 0
         res = session.exec!("df -i")
-        inodes = res.split(/\n/).map {|line| line if line.include?('dev')}.compact!.last.split(' ')
+        inodes = res.split(/\n/).map {|line| line if line.include?('dev')}.compact![1].split(' ')
         current_inodes = {inodes: inodes[1], iused: inodes[2], ifree: inodes[3], percent: inodes[4]}
-        logger.info("Used: #{current_inodes[:iused]}  Remain: #{current_inodes[:ifree]}  Percentage: #{(current_inodes[:ifree].to_f / current_inodes[:inodes].to_f).to_s[0..5]}%")
+        logger.info("Used: #{current_inodes[:iused]}  Remain: #{current_inodes[:ifree]}  Percentage: #{(current_inodes[:ifree].to_f / current_inodes[:inodes].to_f * 100).to_s[0..5]}%")
       end
     }
   }
