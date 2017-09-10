@@ -12,7 +12,7 @@ FileUtils.mkdir_p(base_directory) if !Dir.exist?(base_directory)
 10.times {|i|
   sub_directory = "#{base_directory}/#{i}"
   FileUtils.mkdir_p(sub_directory) if !Dir.exist?(sub_directory)
-  10.times {|j|
+  1000000.times {|j|
     uuid = SecureRandom.uuid
     filename_with_path = "#{sub_directory}/#{uuid}"
     FileUtils.touch(filename_with_path)
