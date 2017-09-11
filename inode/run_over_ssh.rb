@@ -3,8 +3,8 @@ require 'securerandom'
 require 'pry'
 require 'logger'
 
-host = 'ec2-54-183-83-109.us-west-1.compute.amazonaws.com'
-user = 'ubuntu'
+host = 'serer'
+user = 'user'
 
 logger = Logger.new('res.log')
 
