@@ -2,7 +2,7 @@ require 'pry'
 #e.g. https://tech.mktime.com/entry/183
 
 # Only running on terminal with 256bit color support.
-(1..255).map {|n| puts "\e[38;5;#{n}mああああああああああああああああああああああああああああああああああああああああああああ\e[0m"; sleep(0.5)}
+(1..255).to_a.map {|n| puts "\e[38;5;#{n}mああああああああああああああああああああああああああああああああああああああああああああ\e[0m"; sleep(0.5)}
 
 # Running with terminal only supports 8 and 16bit color.
 (1..8).to_a.map {|set|
