@@ -1,6 +1,7 @@
 require 'parallel'
 require 'securerandom'
 require 'optparse'
+require 'time'
 require 'pry'
 
 OPTIONS = {}
@@ -39,6 +40,8 @@ def arr
   }.inject(:+)
 end
 
+calc_start = Time.now
+
 if OPTIONS[:calc_method] === 'uuid'
   resp = Parallel.map(arr, type) {|i|
     uuid
@@ -49,3 +52,6 @@ else
   }
 end
 
+calc_end = Time.now
+
+puts "Total calc time is #{(calc_end - calc_start).round(3)} seconds."
