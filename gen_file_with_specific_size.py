@@ -51,13 +51,14 @@ if __name__ == '__main__':
     
     absolute_filepath = "%s/%s.txt" % (arguments.directory_path, arguments.filename)
 
-    # 指定したファイルが既に存在したら
-    # raise Exception('FileAlreadyExistError')
-    os.path.exists(absolute_filepath)
+    # 指定したファイルが既に存在したら例外で終了
+    if os.path.exists(absolute_filepath):
+        raise Exception('FileAlreadyExistsError')
 
-    # 指定したファイルサイズが保存先のディスクの容量を上回っていれば
-    # raise Exception('FilesizeExceedsTargetDriveError')
+    # 指定したファイルサイズが保存先のディスクの容量を上回っていれば例外で終了
     stats = os.statvfs(arguments.directory_path)
     available_gigabytes = stats.f_frsize * stats.f_bavail / 1024 / 1024 / 1024
+    if available_gigabytes <= arguments.size:
+        raise Exception('FilesizeExceedsTargetDriveError')
 
     pdb.set_trace()
