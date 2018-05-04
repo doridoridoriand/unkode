@@ -23,24 +23,21 @@ available_gigabytes = stat.bytes_free / 1024 / 1024 / 1024
 raise StandardError, 'FilesizeExceedsTargetDriveError' unless available_gigabytes > OPTIONS[:size]
 
 absolute_file_path = "#{OPTIONS[:directory_path]}/#{OPTIONS[:filename]}.txt"
-binding.pry
 
 # 既にファイルが指定したディレクトリに存在する場合、例外とする
-if File.file?(absolute_file_path)
-  raise StandardError, 'FileAlreadyExistsError'
-end
-
-binding.pry
+raise StandardError, 'FileAlreadyExistsError' if File.file?(absolute_file_path)
 
 while true
   begin
     File.open(absolute_file_path, 'a') do |r|
-      r << SecureRandom.hex(256)
+      #binding.pry
       if File.size(absolute_file_path) >= OPTIONS[:size] * 1024 * 1024 * 1024
         raise StandardError, 'FileSizeReachedError'
       end
+      r << SecureRandom.hex(128)
     end
   rescue => e
+    exit
   end
 end
 
