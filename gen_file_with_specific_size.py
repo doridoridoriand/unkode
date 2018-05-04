@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 import argparse
 import random
@@ -60,5 +61,17 @@ if __name__ == '__main__':
     available_gigabytes = stats.f_frsize * stats.f_bavail / 1024 / 1024 / 1024
     if available_gigabytes <= arguments.size:
         raise Exception('FilesizeExceedsTargetDriveError')
+
+    fs = open(absolute_filepath, 'w')
+
+    while True:
+        try:
+            if int(os.path.getsize(absolute_filepath)) >= (arguments.size * 1024 * 1024 * 1024):
+                raise Exception('FilesizeReachedError')
+            fs.write(gen_hex())
+        except Exception as err:
+            fs.close()
+            sys.exit()
+
 
     pdb.set_trace()
