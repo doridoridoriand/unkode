@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/vendor/autoload.php';
+
 function hex128() {
   $str = '';
   for ($i = 0; $i < 5; $i++) {
@@ -9,10 +11,13 @@ function hex128() {
 }
 
 $arguments = [
-  ['s', 'size'],
-  ['f', 'filename'],
-  ['d', 'directory-path']
+  # [short option, long option, required or not, discript]
+  ['s', 'size',           true, 'File size(GB)'],
+  ['f', 'filename',       true, 'Output filename'],
+  ['d', 'directory-path', true, 'Output directory with full path']
 ];
+
+eval(\Psy\sh());
 
 $short_options = 
 $long_options  = 
