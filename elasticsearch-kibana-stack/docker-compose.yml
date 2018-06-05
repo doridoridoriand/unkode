@@ -7,18 +7,23 @@ services:
       - ./es/config:/usr/share/elasticsearch/config
     ports:
       - 9200:9200
-    expose:
-      - 9300
+      - 9300:9300
     ulimits:
       nofile:
         soft: 65536
         hard: 65536
+    environment:
+      - discovery.type=single-node
   kibana:
     build: kibana
     links:
       - elasticsearch:elasticsearch
     ports:
       - 5601:5601
+  logstash:
+    build: logstash
+    links:
+      - elasticsearch:elasticsearch
 volumes:
   data_directory:
     driver: local
