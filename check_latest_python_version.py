@@ -8,7 +8,9 @@ from bs4 import BeautifulSoup
 
 import pdb
 
-html = urllib2.urlopen('https://www.python.org/downloads/')
+fs = urllib2.urlopen('https://www.python.org/downloads/release/latest')
+html = fs.read()
+
 soup = BeautifulSoup(html, 'html.parser')
 
 li = soup.find_all('li')
