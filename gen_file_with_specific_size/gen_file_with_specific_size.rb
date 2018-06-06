@@ -1,4 +1,3 @@
-require 'uuid'
 require 'optparse'
 require 'securerandom'
 require 'sys-filesystem'
