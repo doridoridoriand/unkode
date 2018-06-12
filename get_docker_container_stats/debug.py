@@ -48,5 +48,5 @@ if __name__ == '__main__':
     print("======================")
     print(str(cpu_percent) + '%')
     print("======================")
-    # こちらの値は多分マシンで供給できるCPUPercentの総容量になっているはず
+    # Total available cpu percentage on this machine
     print(str(system_cpu_percent) + '%')
