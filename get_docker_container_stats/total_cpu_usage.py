@@ -1,4 +1,5 @@
 import docker
+import argparse
 import pdb
 import pprint
 
@@ -20,22 +21,44 @@ def containers():
     """
     return client.containers.list()
 
+def all_cpu_usage(metrix):
+    """
+    @param  Type: list, Param: metrix, Description: cpu metrix list
+    @return Type: float
+    """
+    usage = [obj['cpu_percent'] for obj in metrix]
+    return sum(usage) / len(usage)
+
+def cpu_usage(metrix, container_number):
+    """
+    @param  Type: list,    Param: metrix, Description: cpu metrix list
+    @param  Type: Integer, Param: metrix, Description: container number
+    @return Type: float
+    """
+    return metrix[container_number]
+
+
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description = 'Show CPU usage of docker container(s).')
+    parser.add_argument('-a', '--all',
+                        action = 'store_true',
+                        help = 'show Average out all containers CPU utilization.')
+
     containers = containers()
-    useage_in_usermode = []
+    metrix = []
     for container in containers:
         container        = container_attr(container.id)
-        container_status = container_status(container)
+        container_information = container_status(container)
 
-        container_name        = container_status['name']
-        total_cpu_usage       = container_status['cpu_stats']['cpu_usage']['total_usage']
-        cpu_usage_in_usermode = container_status['cpu_stats']['cpu_usage']['usage_in_usermode']
-        online_cpus           = container_status['cpu_stats']['online_cpus']
-        system_cpu_usage      = container_status['cpu_stats']['system_cpu_usage']
+        container_name      = container_information['name']
+        total_cpu_usage     = container_information['cpu_stats']['cpu_usage']['usage_in_usermode']
+        pretotal_cpu_usage  = container_information['precpu_stats']['cpu_usage']['usage_in_usermode']
+        online_cpus         = container_information['cpu_stats']['online_cpus']
+        delta_cpu_usage     = total_cpu_usage - pretotal_cpu_usage
+        cpu_percent         = float(delta_cpu_usage) / float(NANOCPUS_SCALE) * 100
+        metrix.append({'container_name':     container_name,
+         'total_cpu_usage':    total_cpu_usage,
+         'pretotal_cpu_usage': pretotal_cpu_usage,
+         'delta_cpu_usage':    delta_cpu_usage,
+         'cpu_percent':        cpu_percent})
 
-        pdb.set_trace()
-
-        useage_in_usermode.append(container.stats(stream=False)['precpu_stats']['cpu_usage']['usage_in_usermode'])
-        pretty_print(container.stats(stream=False))
-
-    print(pretty_print(useage_in_usermode))
