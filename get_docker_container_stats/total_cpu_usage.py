@@ -6,6 +6,10 @@ import pprint
 NANOCPUS_SCALE = 1000000000
 client = docker.from_env()
 
+class ContainerNumberNotDetectedError(Exception):
+    def __str__(self):
+        return 'Container number is not entered. Entering the container number can not be omitted with the `all` option not selected.'
+
 def pretty_print(obj):
     pprint.pprint(obj)
 
@@ -35,7 +39,7 @@ def cpu_usage(metrix, container_number):
     @param  Type: Integer, Param: metrix, Description: container number
     @return Type: float
     """
-    return metrix[container_number]
+    return metrix[container_number]['cpu_percent']
 
 
 if __name__ == '__main__':
@@ -43,6 +47,19 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--all',
                         action = 'store_true',
                         help = 'show Average out all containers CPU utilization.')
+    parser.add_argument('-n', '--number',
+                        action = 'store',
+                        nargs = None,
+                        const = None,
+                        default = None,
+                        type = int,
+                        choices = None,
+                        help = 'Input container')
+
+    arguments = parser.parse_args()
+
+    if arguments.all == False and arguments.number == None:
+        raise ContainerNumberNotDetectedError()
 
     containers = containers()
     metrix = []
