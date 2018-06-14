@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: UTF-8
+
 import docker
 import argparse
 import pdb
@@ -9,6 +12,10 @@ client = docker.from_env()
 class ContainerNumberNotDetectedError(Exception):
     def __str__(self):
         return 'Container number is not entered. Entering the container number can not be omitted with the `all` option not selected.'
+
+class TooMuchOptionsAreSelectedError(Exception):
+    def __str__(self):
+        return '`all` and `number` option can not be used at the same time.'
 
 def pretty_print(obj):
     pprint.pprint(obj)
@@ -61,6 +68,9 @@ if __name__ == '__main__':
     if arguments.all == False and arguments.number == None:
         raise ContainerNumberNotDetectedError()
 
+    if arguments.all == True and arguments.number != None:
+        raise TooMuchOptionsAreSelectedError()
+
     containers = containers()
     metrix = []
     for container in containers:
@@ -79,3 +89,8 @@ if __name__ == '__main__':
          'delta_cpu_usage':    delta_cpu_usage,
          'cpu_percent':        cpu_percent})
 
+    if arguments.all == True:
+        print(all_cpu_usage(metrix))
+
+    if arguments.number != None:
+        print(cpu_usage(metrix, arguments.number))
