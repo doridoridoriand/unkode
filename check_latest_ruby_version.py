@@ -9,8 +9,9 @@ def pretty_print(obj):
 def versions(obj):
     ver = []
     for entry in obj:
-        if 'Released' in entry:
+        if 'Released' in entry and 'preview' not in entry:
             ver.append(entry)
+    print(str(ver))
     return re.findall('[0-9].[0-9].[0-9]', ','.join(ver))
 
 if __name__ == '__main__':
