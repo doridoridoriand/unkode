@@ -40,6 +40,10 @@ def all_cpu_usage(metrix):
     usage = [obj['cpu_percent'] for obj in metrix]
     return sum(usage) / len(usage)
 
+def output(content):
+    f = open(arguments.output, 'w')
+    f.write(str(content))
+
 def cpu_usage(metrix, container_number):
     """
     @param  Type: list,    Param: metrix, Description: cpu metrix list
@@ -62,6 +66,14 @@ if __name__ == '__main__':
                         type = int,
                         choices = None,
                         help = 'Input container')
+    parser.add_argument('-o', '--output',
+                        action = 'store',
+                        nargs = None,
+                        const = None,
+                        default = None,
+                        type = str,
+                        choices = None,
+                        help = 'Output container stats to the file.')
 
     arguments = parser.parse_args()
 
@@ -89,8 +101,14 @@ if __name__ == '__main__':
          'delta_cpu_usage':    delta_cpu_usage,
          'cpu_percent':        cpu_percent})
 
-    if arguments.all == True:
+    if arguments.all == True and arguments.output == None:
         print(all_cpu_usage(metrix))
 
-    if arguments.number != None:
+    if arguments.all == True and arguments.output != None:
+        output(all_cpu_usage(metrix))
+
+    if arguments.number != None and arguments.output == None:
         print(cpu_usage(metrix, arguments.number))
+
+    if arguments.number != None and arguments.output != None:
+        output(cpu_usage(metrix, arguments.number))
