@@ -16,7 +16,7 @@ services:
     image: postgres:9.6.9
     container_name: postgres
     volumes:
-      - ./postgres:/var/lib/postgres/data
+      - ./postgres:/var/lib/postgresql/data
   redash-server:
     image: redash/redash:4.0.0.b3948
     container_name: redash-server
@@ -29,6 +29,9 @@ services:
       REDASH_REDIS_URL: "redis://redis:6379/0"
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
       REDASH_COOKIE_SECRET: veryverysecret
+    depends_on:
+      - postgres
+      - redis
   redash-worker:
     image: redash/redash:4.0.0.b3948
     container_name: redash-worker
@@ -40,4 +43,6 @@ services:
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
       QUEUES: "queries,scheduled_queries,celery"
       WORKERS_COUNT: 2
+    depends_on:
+      - redash-server
 
