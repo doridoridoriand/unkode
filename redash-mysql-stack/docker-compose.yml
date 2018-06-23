@@ -1,0 +1,43 @@
+version: '2'
+services:
+  mysql:
+    image: mysql:8.0.11
+    container_name: mysql
+    volumes:
+      - ./mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: redash
+  redis:
+    image: redis:4.0
+  postgres:
+    image: postgres:9.6.9
+    container_name: postgres
+    volumes:
+      - ./postgres:/var/lib/postgres/data
+  redash-server:
+    image: redash:4.0.0.b3948
+    container_name: redash-server
+    command: server
+    ports:
+      - 5000:5000
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      REDASH_COOKIE_SECRET: veryverysecret
+  redash-worker:
+    image: redash:4.0.0.b3948
+    container_name: redash-worker
+    command: scheduler
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      QUEUES: "queries,scheduled_queries,celery"
+      WORKERS_COUNT: 2
+
