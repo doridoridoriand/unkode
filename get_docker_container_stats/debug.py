@@ -26,9 +26,14 @@ if __name__ == '__main__':
     pretotal_cpu_usage  = container_status['precpu_stats']['cpu_usage']['usage_in_usermode']
     system_cpu_usage    = container_status['cpu_stats']['system_cpu_usage']
     presystem_cpu_usage = container_status['precpu_stats']['system_cpu_usage']
+    print("======================")
     print(container_status['name'])
     print("======================")
     print(float(total_cpu_usage) / float(system_cpu_usage) * 100)
+    print("======================")
+    print(float(total_cpu_usage) / float(4 * 1024 * NANOCPUS_SCALE))
+    print("======================")
+    print(float(total_cpu_usage) / float(4 * 1024 * NANOCPUS_SCALE) * 100)
     print("======================")
     pretty_print(container_status['cpu_stats'])
     print("======================")
