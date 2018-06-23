@@ -18,7 +18,7 @@ services:
     volumes:
       - ./postgres:/var/lib/postgres/data
   redash-server:
-    image: redash:4.0.0.b3948
+    image: redash/redash:4.0.0.b3948
     container_name: redash-server
     command: server
     ports:
@@ -30,7 +30,7 @@ services:
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
       REDASH_COOKIE_SECRET: veryverysecret
   redash-worker:
-    image: redash:4.0.0.b3948
+    image: redash/redash:4.0.0.b3948
     container_name: redash-worker
     command: scheduler
     environment:
