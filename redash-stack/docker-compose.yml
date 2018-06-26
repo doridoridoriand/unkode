@@ -44,5 +44,7 @@ services:
       QUEUES: "queries,scheduled_queries,celery"
       WORKERS_COUNT: 2
     depends_on:
+      - postgres
+      - redis
       - redash-server
 
