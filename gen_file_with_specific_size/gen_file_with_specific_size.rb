@@ -35,7 +35,7 @@ while true
       end
       r << SecureRandom.hex(128)
     end
-  rescue => e
+  rescue
     exit
   end
 end
