@@ -4,3 +4,5 @@ mysql:
   user: user
   password: password
   database: something_awesome
+
+workspace-path: /tmp
