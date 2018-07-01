@@ -5,4 +5,8 @@ mysql:
   password: password
   database: something_awesome
 
+redis:
+  host: localhost
+  port: 6379
+
 workspace-path: /tmp
