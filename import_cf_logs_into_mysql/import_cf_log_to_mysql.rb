@@ -37,12 +37,12 @@ def create_schema
     query = "create table `#{TABLE_NAME}` ("
     query << "id bigint(20) unsigned not null auto_increment,"
     fields.map {|r|
-      query << "`#{r}` varchar(255) not null,"
+      query << "`#{r}` text not null,"
     }
     query << "primary key(`id`)) engine=InnoDB default charset=utf8;"
     @client.query(query)
     res = @client.query('show tables').map {|r| r}
-    if res.first.values.first === table_name
+    if res.first.values.first === TABLE_NAME
       true
     end
   rescue => e
