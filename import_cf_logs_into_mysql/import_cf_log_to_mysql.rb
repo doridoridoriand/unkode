@@ -2,6 +2,7 @@ require 'optparse'
 require 'mysql2'
 require 'yaml'
 require 'zlib'
+require 'logger'
 require 'pry'
 
 OPTIONS = {}
@@ -21,6 +22,8 @@ mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['mysql']
 
 @log_file_pathes = Dir.glob("#{OPTIONS[:directory_path]}/*")
 
+@logger = Logger.new STDOUT
+@logger.level = Logger::INFO
 
 @client = Mysql2::Client.new(:host =>     mysql_config['host'],
                              :username => mysql_config['username'],
@@ -56,7 +59,8 @@ def insert_row
   column.shift
   column = column.map {|r| "`#{r}`"}.join(',')
 
-  rows   = @log_file_pathes.sample(10).map {|r| r.log_contents}
+  rows   = @log_file_pathes.sample(300).map {|r| r.log_contents}
+  @logger.info("Log files load completed.")
   fields = rows.map {|r| r.to_arrays}.map {|r| r.map {|f| f if f.count > 1}.compact}
   fields.map {|file| file.map {|r|
     q = "insert into #{TABLE_NAME}(#{column}) values(#{r.map {|f| "'#{f}'"}.join(',')})"
