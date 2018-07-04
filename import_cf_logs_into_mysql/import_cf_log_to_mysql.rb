@@ -20,10 +20,14 @@ raise OptionParser::MissingArgument, 'ConfigureFilePathNotDetectedError' unless 
 
 mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['mysql']
 
-@log_file_pathes = Dir.glob("#{OPTIONS[:directory_path]}/*")
-
 @logger = Logger.new STDOUT
 @logger.level = Logger::INFO
+
+@logger.info("Config file load conpleted. Current configure are below.")
+@logger.info("MySQL: host=>#{mysq_config['host']}, username=>#{mysql_config['username']}, password=>#{mysql_config['password']}, database=>#{mysql_config['database']}")
+
+@log_file_pathes = Dir.glob("#{OPTIONS[:directory_path]}/*")
+@logger.info("Number of target log files: #{@log_file_pathes.count}")
 
 @client = Mysql2::Client.new(:host =>     mysql_config['host'],
                              :username => mysql_config['username'],
@@ -37,6 +41,7 @@ def create_schema
     rows   = @log_file_pathes.sample(1).first.log_contents
     fields = rows.to_arrays[1].first.split(' ')
     fields.shift
+    @logger.info("Data column: #{fields.join(', ')}")
     query = "create table `#{TABLE_NAME}` ("
     query << "id bigint(20) unsigned not null auto_increment,"
     fields.map {|r|
