@@ -1,5 +1,17 @@
-version: '2'
+version: '3'
 services:
+  clickhouse:
+    image: yandex/clickhouse-server:1.1
+    container_name: clickhouse
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65535
+        hard: 65535
+    volumes:
+      - ./clickhouse/data:/var/lib/clickhouse
   mysql:
     image: mysql:5.7.22
     container_name: mysql
