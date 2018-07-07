@@ -34,7 +34,7 @@ alphabet.map {|a|
   table_elements = documents.xpath("//table/tbody/tr")
   contents = table_elements.map {|r| r.children.map {|e| e.text}}.map {|r| r.map {|f| f.gsub("\n", '')}}
 
-  airports = contents.map {|e| e.row_to_hash if e[11]}.compact
+  airports = contents.map {|e| e.row_to_hash if e[7]}.compact
 
   binding.pry
 }
