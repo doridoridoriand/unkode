@@ -28,9 +28,9 @@ end
 
 contents = alphabet.map {|a|
   sleep 1
-  documents = (base_url + a).url_to_document
+  documents      = (base_url + a).url_to_document
   table_elements = documents.xpath("//table/tbody/tr")
-  contents = table_elements.map {|r| r.children.map {|e| e.text}}.map {|r| r.map {|f| f.gsub("\n", '')}}
+  contents       = table_elements.map {|r| r.children.map {|e| e.text}}.map {|r| r.map {|f| f.gsub("\n", '')}}
 
   contents.map {|e| e.row_to_hash if e[7]}.compact
 }
