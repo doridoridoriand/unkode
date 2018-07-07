@@ -3,7 +3,7 @@ require 'csv'
 require 'pry'
 
 alphabet = ('A'..'Z').to_a
-base_url = 'https://en.wikipedia.org/wiki/List_of_airports_by_IATA_code:'
+base_url = 'https://en.wikipedia.org/wiki/List_of_airports_by_IATA_code:_'
 
 public
 
@@ -18,5 +18,10 @@ end
 #  airports_rough_data.map {|row| f << row}
 #end
 
-binding.pry
+alphabet.map {|a|
+  documents = (base_url + a).url_to_document
+  table_elements = documents.xpath("//table/tbody/tr")
+  contents = table_elements.map {|r| r.children.map {|e| e.text}}.map {|r| r.map {|f| f.gsub("\n", '')}}
+  binding.pry
+}
 
