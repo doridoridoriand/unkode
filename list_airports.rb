@@ -34,8 +34,8 @@ contents = alphabet.map {|a|
 
   contents.map {|e| e.row_to_hash if e[7]}.compact
 }
-
+resize = []
+contents.map {|r| r.map {|f| resize << f}}
 File.open('airports.json', 'w') do |fs|
-  contents.map{|page| fs << page.to_json}
+  fs << resize.to_json
 end
-
