@@ -1,10 +1,8 @@
 class MysqlConnector
-  attr :configure, :schema
-  # コネクションを張る
-  # 当該のスキーマがあるか確認する
-  def initialize(configure, schema)
+  attr :configure
+  # コネクションを張る(ちゃんとコネクションを張れるかチェックする)
+  def initialize(configure)
     @configure = configure
-    @schema    = schema
   end
 end
 
