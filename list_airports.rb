@@ -1,5 +1,6 @@
 require 'mechanize'
 require 'csv'
+require 'json'
 require 'pry'
 
 alphabet = ('A'..'Z').to_a
@@ -14,10 +15,6 @@ def url_to_document
   Nokogiri::HTML.parse(agent.get(self).content)
 end
 
-#CSV.open('airports.csv', 'w') do |f|
-#  airports_rough_data.map {|row| f << row}
-#end
-
 def row_to_hash
   keys = ['IATA', 'ICAO', 'AIRPORT_NAME', 'LOCATION_SERVED', 'TIME', 'DST']
   {keys[0].to_sym => self[1],
@@ -29,13 +26,16 @@ def row_to_hash
   }
 end
 
-alphabet.map {|a|
+contents = alphabet.map {|a|
+  sleep 1
   documents = (base_url + a).url_to_document
   table_elements = documents.xpath("//table/tbody/tr")
   contents = table_elements.map {|r| r.children.map {|e| e.text}}.map {|r| r.map {|f| f.gsub("\n", '')}}
 
-  airports = contents.map {|e| e.row_to_hash if e[7]}.compact
-
-  binding.pry
+  contents.map {|e| e.row_to_hash if e[7]}.compact
 }
+
+File.open('airports.json', 'w') do |fs|
+  contents.map{|page| fs << page.to_json}
+end
 
