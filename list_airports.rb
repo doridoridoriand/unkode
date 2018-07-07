@@ -18,10 +18,24 @@ end
 #  airports_rough_data.map {|row| f << row}
 #end
 
+def row_to_hash
+  keys = ['IATA', 'ICAO', 'AIRPORT_NAME', 'LOCATION_SERVED', 'TIME', 'DST']
+  {keys[0].to_sym => self[1],
+   keys[1].to_sym => self[3],
+   keys[2].to_sym => self[5],
+   keys[3].to_sym => self[7],
+   keys[4].to_sym => self[9],
+   keys[5].to_sym => self[11]
+  }
+end
+
 alphabet.map {|a|
   documents = (base_url + a).url_to_document
   table_elements = documents.xpath("//table/tbody/tr")
   contents = table_elements.map {|r| r.children.map {|e| e.text}}.map {|r| r.map {|f| f.gsub("\n", '')}}
+
+  airports = contents.map {|e| e.row_to_hash if e[11]}.compact
+
   binding.pry
 }
 
