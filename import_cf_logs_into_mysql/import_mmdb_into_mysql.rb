@@ -6,6 +6,8 @@ require 'pry'
 
 ###
 # maxMindのGeoLite2データベースをMySQLに投入するスクリプト
+# ライブラリこれ使う
+# https://github.com/yhirose/maxminddb
 ###
 
 OPTIONS = {}
