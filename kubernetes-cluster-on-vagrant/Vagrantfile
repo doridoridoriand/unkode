@@ -1,0 +1,31 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+NUMBER_OF_MINION       = 4
+MEMORY_CAPACITY_MINION = 4096
+CPU_CAPACITY_MINION    = 2
+
+OS = 'ubuntu/bionic64'
+
+(1..NUMBER_OF_MINION).to_a
+
+Vagrant.configure(2) do |config|
+  config.vm.define "master" do |master|
+    master.vm.box = OS
+    master.vm.network 'private_network', ip: "192.168.10.1"
+    master.vm.provider 'virtualbox' do |vb|
+      vb.memory = 2048
+      vb.cpus   = 2
+    end
+  end
+  (1..NUMBER_OF_MINION).to_a do |i|
+    config.vm.define "minion-#{i}" do |minion|
+      minion.vm.box = OS
+      minion.vm.network 'private_network', ip: "192.168.10.#{10 + i}"
+      minion.vm.provider 'virtualbox' do |vb|
+        vb.memory = MEMORY_CAPACITY_MINION
+        vb.cpus   = CPU_CAPACITY_MINION
+      end
+    end
+  end
+end

@@ -1,0 +1,6 @@
+---
+
+- hosts: minion
+  user: vagrant
+  roles:
+    - minion
