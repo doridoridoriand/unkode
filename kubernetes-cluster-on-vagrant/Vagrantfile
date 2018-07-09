@@ -26,6 +26,10 @@ Vagrant.configure(2) do |config|
         vb.memory = MEMORY_CAPACITY_MINION
         vb.cpus   = CPU_CAPACITY_MINION
       end
+      minion.vm.provision 'ansible' do |ansible|
+        ansible.playbook       = 'minion.yml'
+        ansible.inventory_path = 'provision/minion'
+      end
     end
   end
 end
