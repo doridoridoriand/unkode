@@ -7,28 +7,23 @@ CPU_CAPACITY_MINION    = 2
 
 OS = 'ubuntu/bionic64'
 
-(1..NUMBER_OF_MINION).to_a
+VMS = [{vm_name: 'master00', number_of_cpu: 1, memory_capacity: 1024, ip_addr: '192.168.10.10'}]
+
+(1..NUMBER_OF_MINION).to_a.map {|i|
+  VMS << {vm_name: "minion#{i.to_s.rjust(2, '0')}",
+          number_of_cpu: CPU_CAPACITY_MINION,
+          memory_capacity: MEMORY_CAPACITY_MINION,
+          ip_addr: "192.168.10.#{10 + i}"}
+}
 
 Vagrant.configure(2) do |config|
-  config.vm.define "master" do |master|
-    master.vm.box = OS
-    master.vm.network 'private_network', ip: "192.168.10.1"
-    master.vm.provider 'virtualbox' do |vb|
-      vb.memory = 2048
-      vb.cpus   = 2
-    end
-  end
-  (1..NUMBER_OF_MINION).to_a do |i|
-    config.vm.define "minion-#{i}" do |minion|
-      minion.vm.box = OS
-      minion.vm.network 'private_network', ip: "192.168.10.#{10 + i}"
-      minion.vm.provider 'virtualbox' do |vb|
-        vb.memory = MEMORY_CAPACITY_MINION
-        vb.cpus   = CPU_CAPACITY_MINION
-      end
-      minion.vm.provision 'ansible' do |ansible|
-        ansible.playbook       = 'minion.yml'
-        ansible.inventory_path = 'provision/minion'
+  VMS.each do |vm|
+    config.vm.define vm[:vm_name] do |node|
+      node.vm.box = OS
+      node.vm.network 'private_network', ip: vm[:ip_addr]
+      node.vm.provider 'virtualbox' do |vb|
+        vb.memory = vm[:memory_capacity]
+        vb.cpus   = vm[:number_of_cpu]
       end
     end
   end
