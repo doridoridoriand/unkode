@@ -25,6 +25,17 @@ Vagrant.configure(2) do |config|
         vb.memory = vm[:memory_capacity]
         vb.cpus   = vm[:number_of_cpu]
       end
+
+      node.vm.provision 'ansible' do |ansible|
+        if vm[:vm_name].include?('master')
+          ansible.playbook = 'provision/master.yml'
+          ansible.limit    = 'master'
+        end
+        if vm[:vm_name].include?('minion')
+          ansible.playbook = 'provision/minion.yml'
+          ansible.limit    = 'minion'
+        end
+      end
     end
   end
 end
