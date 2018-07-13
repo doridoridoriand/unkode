@@ -4,16 +4,15 @@
 NUMBER_OF_MINION       = 4
 MEMORY_CAPACITY_MINION = 4096
 CPU_CAPACITY_MINION    = 2
-
 OS = 'ubuntu/bionic64'
 
 VMS = [{vm_name: 'master00', number_of_cpu: 1, memory_capacity: 1024, ip_addr: '192.168.10.10'}]
 
 (1..NUMBER_OF_MINION).to_a.map {|i|
-  VMS << {vm_name: "minion#{i.to_s.rjust(2, '0')}",
-          number_of_cpu: CPU_CAPACITY_MINION,
+  VMS << {vm_name:         "minion#{i.to_s.rjust(2, '0')}",
+          number_of_cpu:   CPU_CAPACITY_MINION,
           memory_capacity: MEMORY_CAPACITY_MINION,
-          ip_addr: "192.168.10.#{10 + i}"}
+          ip_addr:         "192.168.10.#{10 + i}"}
 }
 
 Vagrant.configure(2) do |config|
@@ -26,16 +25,22 @@ Vagrant.configure(2) do |config|
         vb.cpus   = vm[:number_of_cpu]
       end
 
-      node.vm.provision 'ansible' do |ansible|
-        if vm[:vm_name].include?('master')
-          ansible.playbook = 'provision/master.yml'
-          ansible.limit    = 'master'
-        end
-        if vm[:vm_name].include?('minion')
-          ansible.playbook = 'provision/minion.yml'
-          ansible.limit    = 'minion'
-        end
-      end
+#      node.vm.provision 'ansible' do |ansible|
+#        if vm[:vm_name].include?('master')
+#          ansible.playbook = 'provision/master.yml'
+#          ansible.limit    = 'all'
+#        end
+#        if vm[:vm_name].include?('minion')
+#          ansible.playbook = 'provision/minion.yml'
+#          ansible.limit    = 'all'
+#        end
+#      end
+    end
+  end
+  config.vm.define 'master00' do |master|
+    master.vm.provision :ansible do |ansible|
+      ansible.playbook = 'provision/master.yml'
+      ansible.limit    = 'all'
     end
   end
 end
