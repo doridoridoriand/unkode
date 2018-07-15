@@ -6,8 +6,12 @@ require 'pry'
 
 ###
 # maxMindのGeoLite2データベースをMySQLに投入するスクリプト
+# 0.0.0.0 ~ 255.255.255.255を機械的に投入しちゃう感じ
+# 約43奥レコード生成されるのでDBが試される
+# 実際には、現時点でMaxMind側の方に存在しないレコードはスキップさせるので、実際にはかなり少なくなるはず
 # ライブラリこれ使う
 # https://github.com/yhirose/maxminddb
+# gz形式は予め解凍しておくこと
 ###
 
 OPTIONS = {}
@@ -23,6 +27,7 @@ raise OptionParser::MissingArgument, 'DirectoryPathNotDetectedError'     unless 
 raise OptionParser::MissingArgument, 'ConfigureFilePathNotDetectedError' unless OPTIONS[:yaml_file_path]
 
 mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['mysql']
+mmdb         = MaxMindDB.new(OPTIONS[:mmdb_file_path])
 
 @logger = Logger.new STDOUT
 @logger.level = Logger::INFO
