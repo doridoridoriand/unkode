@@ -1,1 +1,1 @@
-FROM docker.elastic.co/kibana/kibana:5.6.9
+FROM docker.elastic.co/kibana/kibana-oss:6.3.0
