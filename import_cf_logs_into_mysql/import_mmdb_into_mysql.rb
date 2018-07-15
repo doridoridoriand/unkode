@@ -48,4 +48,4 @@ end
 
 tables = @mysql_client.query("show tables").map {|r| r}
 binding.pry
-create_table if OPTIONS[:create_db_table] 
+create_table if OPTIONS[:create_db_table] && tables.map {|l| l.values}.flatten.include?('mmdb')
