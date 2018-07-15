@@ -1,5 +1,6 @@
 require 'optparse'
 require 'yaml'
+require 'mysql2'
 require 'maxminddb'
 require 'logger'
 require 'pry'
@@ -27,7 +28,11 @@ raise OptionParser::MissingArgument, 'DirectoryPathNotDetectedError'     unless 
 raise OptionParser::MissingArgument, 'ConfigureFilePathNotDetectedError' unless OPTIONS[:yaml_file_path]
 
 mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['mysql']
-mmdb         = MaxMindDB.new(OPTIONS[:mmdb_file_path])
+@mysql_client = Mysql2::Client.new(:host     => mysql_config['host'],
+                                   :username => mysql_config['user'],
+                                   :password => mysql_config['password'],
+                                   :database => mysql_config['database'])
+@mmdb_client  = MaxMindDB.new(OPTIONS[:mmdb_file_path])
 
 @logger = Logger.new STDOUT
 @logger.level = Logger::INFO
@@ -35,8 +40,12 @@ mmdb         = MaxMindDB.new(OPTIONS[:mmdb_file_path])
 public
 
 def create_table
+  binding.pry
 end
 
 def import_geolocation
 end
+
+tables = @mysql_client.query("show tables").map {|r| r}
 binding.pry
+create_table if OPTIONS[:create_db_table] 
