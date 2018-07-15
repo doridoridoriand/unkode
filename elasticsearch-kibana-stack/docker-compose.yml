@@ -1,44 +1,51 @@
 version: '2.2'
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    build:
+      context: es/
     container_name: elasticsearch
     environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - esdata1:/usr/share/elasticsearch/data
+      - esdata:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
       - 9200:9200
+      - 9300:9300
     networks:
-      - esnet
-  elasticsearch2:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
-    container_name: elasticsearch2
-    environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata2:/usr/share/elasticsearch/data
-    networks:
-      - esnet
+      - ekl
 
-volumes:
-  esdata1:
-    driver: local
-  esdata2:
-    driver: local
+  logstash:
+    build:
+      context: logstash/
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - 5000:5000
+    environment:
+      LS_JAVA_OPTS: "-Xmx1024m -Xms1024m"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    build:
+      context: kibana/
+    volumes:
+      - ./kibana/config/:/usr/share/kibana/config:ro
+    ports:
+      - 5601:5601
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
 
 networks:
-  esnet:
+  ekl:
+    driver: bridge
