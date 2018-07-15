@@ -4,8 +4,6 @@ services:
     build:
       context: es/
     container_name: elasticsearch
-    environment:
-      - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
     ulimits:
       memlock:
         soft: -1
@@ -15,8 +13,8 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
-        #networks:
-        #- ekl
+    networks:
+      - elk
 
   logstash:
     build:
@@ -26,10 +24,8 @@ services:
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
     ports:
       - 5000:5000
-    environment:
-      LS_JAVA_OPTS: "-Xmx1024m -Xms1024m"
-      #networks:
-      #- ekl
+    networks:
+      - elk
     depends_on:
       - elasticsearch
 
@@ -40,11 +36,11 @@ services:
       - ./kibana/config/:/usr/share/kibana/config:ro
     ports:
       - 5601:5601
-        #    networks:
-        #- ekl
+    networks:
+      - elk
     depends_on:
       - elasticsearch
 
-        #networks:
-        #  ekl:
-        #    driver: bridge
+networks:
+  elk:
+    driver: bridge
