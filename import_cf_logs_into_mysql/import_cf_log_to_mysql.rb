@@ -24,13 +24,13 @@ mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['mysql']
 @logger.level = Logger::INFO
 
 @logger.info("Config file load conpleted. Current configure are below.")
-@logger.info("MySQL: host=>#{mysq_config['host']}, username=>#{mysql_config['username']}, password=>#{mysql_config['password']}, database=>#{mysql_config['database']}")
+@logger.info("MySQL: host=>#{mysql_config['host']}, username=>#{mysql_config['user']}, password=>#{mysql_config['password']}, database=>#{mysql_config['database']}")
 
 @log_file_pathes = Dir.glob("#{OPTIONS[:directory_path]}/*")
 @logger.info("Number of target log files: #{@log_file_pathes.count}")
 
 @client = Mysql2::Client.new(:host =>     mysql_config['host'],
-                             :username => mysql_config['username'],
+                             :username => mysql_config['user'],
                              :password => mysql_config['password'],
                              :database => mysql_config['database'])
 
