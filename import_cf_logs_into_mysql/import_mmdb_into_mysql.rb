@@ -2,6 +2,7 @@ require 'optparse'
 require 'yaml'
 require 'mysql2'
 require 'maxminddb'
+require 'ipaddress'
 require 'logger'
 require 'pry'
 
@@ -41,6 +42,21 @@ public
 
 def create_table
   binding.pry
+end
+
+def public_ipv4_addresses
+  # 以下IPアドレスを除外する
+  # Class A 10.0.0.0～10.255.255.255     (10.0.0.0/8)
+  # Class B 172.16.0.0～172.31.255.255   (172.16.0.0/12)
+  # Class C 192.168.0.0～192.168.255.255 (192.168.0.0/16)
+  octet = (0..255).to_a
+  all_addr = []
+  private_addr = []
+  (IPAddress "10.0.0.0/8"    ).to('10.255.255.255').map  {|r| private_addr << r}
+  (IPAddress "172.16.0.0/12" ).to('172.31.255.255').map  {|r| private_addr << r}
+  (IPAddress "192.168.0.0/16").to('192.168.255.255').map {|r| private_addr << r}
+  octet.map {|i| octet.map {|j| octet.map {|k| octet.map {|w| all_addr << "#{i}.#{j}.#{k}.#{w}"}}}}
+  all_addr - private_addr
 end
 
 def import_geolocation
