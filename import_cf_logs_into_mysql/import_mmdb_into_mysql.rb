@@ -54,11 +54,19 @@ def private_ip_address
 end
 
 def all_ip_address
+  #octet = (0..255).to_a
+  #all_addr = []
+  #binding.pry
+  #octet.map {|i| octet.map {|j| octet.map {|k| octet.map {|w| all_addr << "#{i}.#{j}.#{k}.#{w}"}}}}
+  #all_addr
+end
+
+# 並列処理可能なように、第一オクテットを引数として、x.0.0.0./8のレンジIPアドレスを配列として返すようにする
+def ip_address_parallel(index)
   octet = (0..255).to_a
-  all_addr = []
-  binding.pry
-  octet.map {|i| octet.map {|j| octet.map {|k| octet.map {|w| all_addr << "#{i}.#{j}.#{k}.#{w}"}}}}
-  all_addr
+  addr = []
+  octet.map {|i| octet.map {|j| octet.map {|k| addr << "#{index}.#{i}.#{j}.#{k}"}}}
+  addr
 end
 
 def public_ipv4_addresses
@@ -73,5 +81,5 @@ def import_geolocation
 end
 
 tables = @mysql_client.query("show tables").map {|r| r}
-binding.pry
+all_ip_address_parallel
 create_table if OPTIONS[:create_db_table] && tables.map {|l| l.values}.flatten.include?('mmdb')
