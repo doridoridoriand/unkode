@@ -1,9 +1,16 @@
-mysql:
+cflog:
   host: localhost
   port: 3306
   user: user
   password: password
-  database: something_awesome
+  database: cflog
+
+maxmind:
+  host: localhost
+  port: 3306
+  user: user
+  password: password
+  database: maxmind
 
 redis:
   host: localhost
