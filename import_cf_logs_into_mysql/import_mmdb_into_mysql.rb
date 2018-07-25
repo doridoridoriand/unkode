@@ -43,7 +43,21 @@ public
 
 def create_table
   res = @mmdb_client.lookup('8.8.8.8')
-  binding.pry
+  keys = ['continent', 'country', 'location', 'registered_country']
+  keys.map {|table|
+    table_keys = res[table].keys.map {|r| r if r != 'names'}.compact
+    query = "create table `#{table}` ("
+    query << "id bigint(20) unsigned not null auto_increment,"
+    table_keys.map {|key|
+      query << "`#{key}` varchar(191),"
+    }
+    p res[table]['names']
+    res[table]['names'].keys.map {|name|
+      query << "`#{name}` varchar(191),"
+    }
+    query << "primary key(`id`)) engine=InnoDB default charset=utf8;"
+    @mysql_client.query(query)
+  }
 end
 
 def private_ip_address
@@ -81,5 +95,5 @@ def import_geolocation
 end
 
 tables = @mysql_client.query("show tables").map {|r| r}
-create_table if OPTIONS[:create_db_table] && tables.map {|l| l.values}.flatten.include?('mmdb')
+create_table if OPTIONS[:create_db_table] && !tables.map {|l| l.values}.flatten.include?('maxmind')
 
