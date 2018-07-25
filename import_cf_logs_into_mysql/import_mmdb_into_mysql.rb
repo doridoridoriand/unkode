@@ -20,9 +20,9 @@ require 'pry'
 OPTIONS = {}
 TABLE_NAME = 'geoip_data'
 OptionParser.new do |opt|
-  opt.on('-y yaml-file-path',      'Absolute file path of configuration file',     String) {|v| OPTIONS[:yaml_file_path]  = v}
-  opt.on('-d mmdb_directory_path', 'Absolute edirectory path of MaxMind DB file.', String) {|v| OPTIONS[:mmdb_file_path]  = v}
-  opt.on('-c' 'Create DB Table')                                                           {|v| OPTIONS[:create_db_table] = v}
+  opt.on('-y yaml-file-path', 'Absolute file path of configuration file',     String) {|v| OPTIONS[:yaml_file_path]  = v}
+  opt.on('-d mmdb_file_path', 'Absolute edirectory path of MaxMind DB file.', String) {|v| OPTIONS[:mmdb_file_path]  = v}
+  opt.on('-c', 'Create DB Table')                                                      {|v| OPTIONS[:create_db_table] = v}
   opt.parse!
 end
 
@@ -42,6 +42,7 @@ mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['mysql']
 public
 
 def create_table
+  res = @mmdb_client.lookup('8.8.8.8')
   binding.pry
 end
 
@@ -54,15 +55,14 @@ def private_ip_address
 end
 
 def all_ip_address
-  #octet = (0..255).to_a
-  #all_addr = []
-  #binding.pry
-  #octet.map {|i| octet.map {|j| octet.map {|k| octet.map {|w| all_addr << "#{i}.#{j}.#{k}.#{w}"}}}}
-  #all_addr
+  octet = (0..25).to_a
+  Parallel.map(octet) {|index|
+    __ip_address(index)
+  }
 end
 
 # 並列処理可能なように、第一オクテットを引数として、x.0.0.0./8のレンジIPアドレスを配列として返すようにする
-def ip_address_parallel(index)
+def __ip_address(index)
   octet = (0..255).to_a
   addr = []
   octet.map {|i| octet.map {|j| octet.map {|k| addr << "#{index}.#{i}.#{j}.#{k}"}}}
@@ -81,5 +81,5 @@ def import_geolocation
 end
 
 tables = @mysql_client.query("show tables").map {|r| r}
-all_ip_address_parallel
 create_table if OPTIONS[:create_db_table] && tables.map {|l| l.values}.flatten.include?('mmdb')
+
