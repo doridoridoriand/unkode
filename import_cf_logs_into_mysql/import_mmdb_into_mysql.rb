@@ -36,29 +36,32 @@ mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['maxmind']
 @mmdb_client  = MaxMindDB.new(OPTIONS[:mmdb_file_path])
 
 # データベースがなかったら作る
-@mysql_client.query("create database `#{mysql_config['database']}`;") if !@mysql_client.query('show databases;').map {|r| r.values}.flatten.include?(mysql_config['database'])
+@mysql_client.query("create database `#{mysql_config['database']}`;") if !@mysql_client.query('show databases;').map {:r.values}.flatten.include?(mysql_config['database'])
 
 @logger = Logger.new STDOUT
 @logger.level = Logger::INFO
 
 public
 
-def create_table
+def create_tables
   res = @mmdb_client.lookup('8.8.8.8')
+  binding.pry
   keys = ['continent', 'country', 'location', 'registered_country']
   keys.map {|table|
-    table_keys = res[table].keys.map {|r| r if r != 'names'}.compact
-    query = "create table `#{table}` ("
-    query << "id bigint(20) unsigned not null auto_increment,"
-    table_keys.map {|key|
-      query << "`#{key}` varchar(191),"
-    }
-    p res[table]['names']
-    res[table]['names'].keys.map {|name|
-      query << "`#{name}` varchar(191),"
-    }
-    query << "primary key(`id`)) engine=InnoDB default charset=utf8;"
-    @mysql_client.query(query)
+    if @mysql_client.query()
+      table_keys = res[table].keys.map {|r| r if r != 'names'}.compact
+      query = "create table `#{table}` ("
+      query << "id bigint(20) unsigned not null auto_increment,"
+      table_keys.map {|key|
+        query << "`#{key}` varchar(191),"
+      }
+      p res[table]['names']
+      res[table]['names'].keys.map {|name|
+        query << "`#{name}` varchar(191),"
+      }
+      query << "primary key(`id`)) engine=InnoDB default charset=utf8;"
+      @mysql_client.query(query)
+    end
   }
 end
 
@@ -96,6 +99,5 @@ end
 def import_geolocation
 end
 
-databases = @mysql_client.query("show databases").map {|r| r}
-create_table if OPTIONS[:create_db_table] && !databases.map {|l| l.values}.flatten.include?('maxmind')
+create_tables if OPTIONS[:create_db_table]
 
