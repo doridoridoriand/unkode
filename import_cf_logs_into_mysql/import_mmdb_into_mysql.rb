@@ -29,12 +29,14 @@ end
 raise OptionParser::MissingArgument, 'DirectoryPathNotDetectedError'     unless OPTIONS[:mmdb_file_path]
 raise OptionParser::MissingArgument, 'ConfigureFilePathNotDetectedError' unless OPTIONS[:yaml_file_path]
 
-mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['mysql']
+mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['maxmind']
 @mysql_client = Mysql2::Client.new(:host     => mysql_config['host'],
                                    :username => mysql_config['user'],
-                                   :password => mysql_config['password'],
-                                   :database => mysql_config['database'])
+                                   :password => mysql_config['password'])
 @mmdb_client  = MaxMindDB.new(OPTIONS[:mmdb_file_path])
+
+# データベースがなかったら作る
+@mysql_client.query("create database `#{mysql_config['database']}`;") if !@mysql_client.query('show databases;').map {|r| r.values}.flatten.include?(mysql_config['database'])
 
 @logger = Logger.new STDOUT
 @logger.level = Logger::INFO
@@ -94,6 +96,6 @@ end
 def import_geolocation
 end
 
-tables = @mysql_client.query("show tables").map {|r| r}
-create_table if OPTIONS[:create_db_table] && !tables.map {|l| l.values}.flatten.include?('maxmind')
+databases = @mysql_client.query("show databases").map {|r| r}
+create_table if OPTIONS[:create_db_table] && !databases.map {|l| l.values}.flatten.include?('maxmind')
 
