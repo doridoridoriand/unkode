@@ -22,7 +22,7 @@ TABLE_NAME = 'geoip_data'
 OptionParser.new do |opt|
   opt.on('-y yaml-file-path', 'Absolute file path of configuration file',     String) {|v| OPTIONS[:yaml_file_path]  = v}
   opt.on('-d mmdb_file_path', 'Absolute edirectory path of MaxMind DB file.', String) {|v| OPTIONS[:mmdb_file_path]  = v}
-  opt.on('-c', 'Create DB Table')                                                      {|v| OPTIONS[:create_db_table] = v}
+  opt.on('-c', 'Create DB Table')                                                     {|v| OPTIONS[:create_db_table] = v}
   opt.parse!
 end
 
@@ -30,14 +30,20 @@ raise OptionParser::MissingArgument, 'DirectoryPathNotDetectedError'     unless 
 raise OptionParser::MissingArgument, 'ConfigureFilePathNotDetectedError' unless OPTIONS[:yaml_file_path]
 
 mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['maxmind']
-@mysql_client = Mysql2::Client.new(:host     => mysql_config['host'],
-                                   :username => mysql_config['user'],
-                                   :password => mysql_config['password'])
+
+# データベースの存在チェック用に使うコネクション
+mysql_client = Mysql2::Client.new(:host     => mysql_config['host'],
+                                  :username => mysql_config['user'],
+                                  :password => mysql_config['password'])
 @mmdb_client  = MaxMindDB.new(OPTIONS[:mmdb_file_path])
 
 # データベースがなかったら作る
-@mysql_client.query("create database `#{mysql_config['database']}`;") if !@mysql_client.query('show databases;').map {:r.values}.flatten.include?(mysql_config['database'])
+mysql_client.query("create database `#{mysql_config['database']}`;") unless mysql_client.query('show databases;').map {|r| r.values}.flatten.include?(mysql_config['database'])
 
+@mysql_client = Mysql2::Client.new(:host     => mysql_config['host'],
+                                   :username => mysql_config['user'],
+                                   :password => mysql_config['password'],
+                                   :database => mysql_config['database'])
 @logger = Logger.new STDOUT
 @logger.level = Logger::INFO
 
@@ -45,20 +51,21 @@ public
 
 def create_tables
   res = @mmdb_client.lookup('8.8.8.8')
-  binding.pry
   keys = ['continent', 'country', 'location', 'registered_country']
   keys.map {|table|
-    if @mysql_client.query()
+    unless @mysql_client.query('show tables').map {|r| r.values}.flatten.include?(table)
       table_keys = res[table].keys.map {|r| r if r != 'names'}.compact
       query = "create table `#{table}` ("
       query << "id bigint(20) unsigned not null auto_increment,"
+      query << "ip varchar(191) not null,"
       table_keys.map {|key|
         query << "`#{key}` varchar(191),"
       }
-      p res[table]['names']
-      res[table]['names'].keys.map {|name|
-        query << "`#{name}` varchar(191),"
-      }
+      if res[table]['names']
+        res[table]['names'].keys.map {|name|
+          query << "`#{name}` varchar(191),"
+        }
+      end
       query << "primary key(`id`)) engine=InnoDB default charset=utf8;"
       @mysql_client.query(query)
     end
