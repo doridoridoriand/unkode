@@ -25,15 +25,17 @@ require 'pry'
 OPTIONS = {}
 TABLE_NAME = 'geoip_data'
 OptionParser.new do |opt|
-  opt.on('-y yaml-file-path', 'Absolute file path of configuration file',     String) {|v| OPTIONS[:yaml_file_path]  = v}
-  opt.on('-d mmdb_file_path', 'Absolute edirectory path of MaxMind DB file.', String) {|v| OPTIONS[:mmdb_file_path]  = v}
-  opt.on('-c', 'Create DB Table')                                                     {|v| OPTIONS[:create_db_table] = v}
-  opt.on('-e', 'Execute insert from MaxMindDB to MySQL')                              {|v| OPTIONS[:execute]         = v}
+  opt.on('-y yaml-file-path', 'Absolute file path of configuration file',     String)  {|v| OPTIONS[:yaml_file_path]       = v}
+  opt.on('-d mmdb_file_path', 'Absolute edirectory path of MaxMind DB file.', String)  {|v| OPTIONS[:mmdb_file_path]       = v}
+  opt.on('-p number-of_process', 'Number of Processors.',                     Integer) {|v| OPTIONS[:number_of_processors] = v}
+  opt.on('-c', 'Create DB Table')                                                      {|v| OPTIONS[:create_db_table]      = v}
+  opt.on('-e', 'Execute insert from MaxMindDB to MySQL')                               {|v| OPTIONS[:execute]              = v}
   opt.parse!
 end
 
 raise OptionParser::MissingArgument, 'DirectoryPathNotDetectedError'     unless OPTIONS[:mmdb_file_path]
 raise OptionParser::MissingArgument, 'ConfigureFilePathNotDetectedError' unless OPTIONS[:yaml_file_path]
+raise OptionParser::MissingArgument, 'NumberOfProcessorNotSelectedError' unless OPTIONS[:number_of_processors]
 
 mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['maxmind']
 
@@ -112,7 +114,7 @@ end
 create_tables if OPTIONS[:create_db_table]
 
 if OPTIONS[:execute]
-  Parallel.map((0..255).to_a) {|index|
+  Parallel.map((0..255).to_a, in_processes: OPTIONS[:number_of_processors]) {|index|
     insert_ipaddress(index)
   }
 end
