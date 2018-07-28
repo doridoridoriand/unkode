@@ -4,6 +4,7 @@ require 'mysql2'
 require 'maxminddb'
 require 'ipaddress'
 require 'parallel'
+require 'thread'
 require 'logger'
 require 'pry'
 
@@ -17,9 +18,8 @@ require 'pry'
 # gz形式は予め解凍しておくこと
 #
 # インサートの方針
-# 43億弱のレコードをメモリに確保するのは現実的では無いので、第一オクテットをインデックスとして、キュー化する。
-# インサート時にレコードがprivateレコードで無いこと、またmmdbに存在することを確かめてインサートする方式に変更する。
-# このスクリプト使わない気がするけどとりあえず実装し切る。
+# 使用するメモリ容量を削減するために、対象となるipアドレスを一気に生成してしまうのではなく、
+# 順次範囲を決めて生成していき、privateIPでないこと、またMaxMindのDBにデータがあることを確認してからインサートする方式に変更する
 ###
 
 OPTIONS = {}
@@ -28,6 +28,7 @@ OptionParser.new do |opt|
   opt.on('-y yaml-file-path', 'Absolute file path of configuration file',     String) {|v| OPTIONS[:yaml_file_path]  = v}
   opt.on('-d mmdb_file_path', 'Absolute edirectory path of MaxMind DB file.', String) {|v| OPTIONS[:mmdb_file_path]  = v}
   opt.on('-c', 'Create DB Table')                                                     {|v| OPTIONS[:create_db_table] = v}
+  opt.on('-e', 'Execute insert from MaxMindDB to MySQL')                              {|v| OPTIONS[:execute]         = v}
   opt.parse!
 end
 
@@ -85,31 +86,33 @@ def private_ip_address
   private_addr
 end
 
-def all_ip_address
-  octet = (0..25).to_a
-  Parallel.map(octet) {|index|
-    __ip_address(index)
-  }
-end
-
 # 並列処理可能なように、第一オクテットを引数として、x.0.0.0./8のレンジIPアドレスを配列として返すようにする
-def __ip_address(index)
+def ip_address(index)
   octet = (0..255).to_a
   addr = []
   octet.map {|i| octet.map {|j| octet.map {|k| addr << "#{index}.#{i}.#{j}.#{k}"}}}
   addr
 end
 
-def public_ipv4_addresses
+def public_ipv4_addresses(index)
   # 以下IPアドレスを除外する
   # Class A 10.0.0.0～10.255.255.255     (10.0.0.0/8)
   # Class B 172.16.0.0～172.31.255.255   (172.16.0.0/12)
   # Class C 192.168.0.0～192.168.255.255 (192.168.0.0/16)
-  all_ip_address - private_ip_address
+  ip_address(index) - private_ip_address
 end
 
-def import_geolocation
+def insert_ipaddress(index)
+  public_ipv4_addresses(index).map {|ip|
+    if @@mmdb_client.loookup(ip).found?
+    end
+  }
 end
 
 create_tables if OPTIONS[:create_db_table]
 
+if OPTIONS[:execute]
+  Parallel.map((0..255).to_a) {|index|
+    insert_ipaddress(index)
+  }
+end
