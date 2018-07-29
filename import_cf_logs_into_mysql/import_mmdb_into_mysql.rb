@@ -90,7 +90,7 @@ end
 
 # 並列処理可能なように、第一オクテットを引数として、x.0.0.0./8のレンジIPアドレスを配列として返すようにする
 def ip_address(index)
-  octet = (0..255).to_a
+  octet = (0..10).to_a
   addr = []
   octet.map {|i| octet.map {|j| octet.map {|k| addr << "#{index}.#{i}.#{j}.#{k}"}}}
   addr
@@ -104,9 +104,29 @@ def public_ipv4_addresses(index)
   ip_address(index) - private_ip_address
 end
 
+def insert_continent
+  k = self['continent'].keys
+  v = self['continent'].values
+  binding.pry
+end
+
+def insert_country
+end
+
+def insert_location
+end
+
+def insert_registered_country
+end
+
 def insert_ipaddress(index)
   public_ipv4_addresses(index).map {|ip|
-    if @@mmdb_client.loookup(ip).found?
+    if @mmdb_client.lookup(ip).found?
+      content = @mmdb_client.lookup(ip)
+      content.insert_continent          if content.continent
+      content.insert_country            if content.country
+      content.insert_location           if content.location
+      content.insert_registered_country if content.registered_country
     end
   }
 end
@@ -114,7 +134,8 @@ end
 create_tables if OPTIONS[:create_db_table]
 
 if OPTIONS[:execute]
-  Parallel.map((0..255).to_a, in_processes: OPTIONS[:number_of_processors]) {|index|
-    insert_ipaddress(index)
-  }
+  insert_ipaddress(8)
+  #Parallel.map((0..2).to_a, in_processes: OPTIONS[:number_of_processors]) {|index|
+  #  insert_ipaddress(index)
+  #}
 end
