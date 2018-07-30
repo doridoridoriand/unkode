@@ -1,6 +1,7 @@
 math.randomseed(os.time())
 local random = math.random
 
+-- 多分これだと衝突する気がする
 local function uuid4()
   local template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
   return string.gsub(template, '[xy]', function (c)
