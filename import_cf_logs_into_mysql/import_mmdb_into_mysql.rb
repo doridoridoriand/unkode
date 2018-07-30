@@ -104,29 +104,18 @@ def public_ipv4_addresses(index)
   ip_address(index) - private_ip_address
 end
 
-def insert_continent
-  k = self['continent'].keys
-  v = self['continent'].values
-  binding.pry
-end
 
-def insert_country
-end
-
-def insert_location
-end
-
-def insert_registered_country
+def mport!
 end
 
 def insert_ipaddress(index)
   public_ipv4_addresses(index).map {|ip|
     if @mmdb_client.lookup(ip).found?
       content = @mmdb_client.lookup(ip)
-      content.insert_continent          if content.continent
-      content.insert_country            if content.country
-      content.insert_location           if content.location
-      content.insert_registered_country if content.registered_country
+      content.continent.import!          if content.continent
+      content.country.import!            if content.country
+      content.location.import!           if content.location
+      content.registered_country.import! if content.registered_country
     end
   }
 end
