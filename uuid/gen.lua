@@ -1,3 +1,5 @@
+-- いい感じのMySQLコネクタが無いので一旦コメントアウト
+-- local mysql = require('resty.mysql')
 math.randomseed(os.time())
 local random = math.random
 
@@ -10,7 +12,7 @@ local function uuid4()
   end)
 end
 
-for i  = 0,10 do
+repeat
   uuid = uuid4()
   print(uuid)
-end
+until 1 == 0
