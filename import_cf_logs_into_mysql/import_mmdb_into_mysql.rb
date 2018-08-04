@@ -113,22 +113,22 @@ def import(ip)
   keys.map {|k|
     if self[k]
       begin
-      items = []
-      items << ip
-      self[k].values.map {|r|
-        if r.class.to_s != 'Hash'
-          items << r
-        end
-        if r.class.to_s === 'Hash'
-          items << r.values
-        end
-      }
-      items = items.flatten
-      result = @@mysql_client.query("desc maxmind.#{k}").map {|r| r}
-      result.shift
-      column = result.map {|r| "`#{r['Field']}`"}.join(',')
-      query = "insert into maxmind.#{k}(#{column}) values(#{items.map {|r| "'#{r}'"}.join(',')})"
-      @@mysql_client.query(query)
+        items = []
+        items << ip
+        self[k].values.map {|r|
+          if r.class.to_s != 'Hash'
+            items << r
+          end
+          if r.class.to_s === 'Hash'
+            items << r.values
+          end
+        }
+        items = items.flatten
+        result = @@mysql_client.query("desc maxmind.#{k}").map {|r| r}
+        result.shift
+        column = result.map {|r| "`#{r['Field']}`"}.join(',')
+        query = "insert into maxmind.#{k}(#{column}) values(#{items.map {|r| "'#{r}'"}.join(',')})"
+        @@mysql_client.query(query)
       rescue => e
         @@logger.warn("Something wrong with #{query}. Error message: #{e.message}")
       end
