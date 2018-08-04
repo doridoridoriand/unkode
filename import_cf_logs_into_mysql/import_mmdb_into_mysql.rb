@@ -48,12 +48,12 @@ mysql_client = Mysql2::Client.new(:host     => mysql_config['host'],
 # データベースがなかったら作る
 mysql_client.query("create database `#{mysql_config['database']}`;") unless mysql_client.query('show databases;').map {|r| r.values}.flatten.include?(mysql_config['database'])
 
-@mysql_client = Mysql2::Client.new(:host     => mysql_config['host'],
+@@mysql_client = Mysql2::Client.new(:host     => mysql_config['host'],
                                    :username => mysql_config['user'],
                                    :password => mysql_config['password'],
                                    :database => mysql_config['database'])
-@logger = Logger.new STDOUT
-@logger.level = Logger::INFO
+@@logger = Logger.new "#{__dir__}/execute_#{__FILE__}_#{Time.now.to_s.gsub(' ', '')}.log"
+@@logger.level = Logger::INFO
 
 public
 
@@ -61,7 +61,7 @@ def create_tables
   res = @mmdb_client.lookup('8.8.8.8')
   keys = ['continent', 'country', 'location', 'registered_country']
   keys.map {|table|
-    unless @mysql_client.query('show tables').map {|r| r.values}.flatten.include?(table)
+    unless @@mysql_client.query('show tables').map {|r| r.values}.flatten.include?(table)
       table_keys = res[table].keys.map {|r| r if r != 'names'}.compact
       query = "create table `#{table}` ("
       query << "id bigint(20) unsigned not null auto_increment,"
@@ -75,7 +75,7 @@ def create_tables
         }
       end
       query << "primary key(`id`)) engine=InnoDB default charset=utf8;"
-      @mysql_client.query(query)
+      @@mysql_client.query(query)
     end
   }
 end
@@ -90,7 +90,7 @@ end
 
 # 並列処理可能なように、第一オクテットを引数として、x.0.0.0./8のレンジIPアドレスを配列として返すようにする
 def ip_address(index)
-  octet = (0..10).to_a
+  octet = (0..255).to_a
   addr = []
   octet.map {|i| octet.map {|j| octet.map {|k| addr << "#{index}.#{i}.#{j}.#{k}"}}}
   addr
@@ -101,21 +101,46 @@ def public_ipv4_addresses(index)
   # Class A 10.0.0.0～10.255.255.255     (10.0.0.0/8)
   # Class B 172.16.0.0～172.31.255.255   (172.16.0.0/12)
   # Class C 192.168.0.0～192.168.255.255 (192.168.0.0/16)
-  ip_address(index) - private_ip_address
+  # ip_address(index) - private_ip_address
+  # MaxMindのDBに存在するもののみimportすることにした。この処理いらない気がするので一旦コメントアウト。
+  # 実際のデータを見てから必要可否判断する。
+  ip_address(index)
 end
 
 
-def mport!
+def import(ip)
+  keys = ['continent', 'country', 'location', 'registered_country']
+  keys.map {|k|
+    if self[k]
+      begin
+      items = []
+      items << ip
+      self[k].values.map {|r|
+        if r.class.to_s != 'Hash'
+          items << r
+        end
+        if r.class.to_s === 'Hash'
+          items << r.values
+        end
+      }
+      items = items.flatten
+      result = @@mysql_client.query("desc maxmind.#{k}").map {|r| r}
+      result.shift
+      column = result.map {|r| "`#{r['Field']}`"}.join(',')
+      query = "insert into maxmind.#{k}(#{column}) values(#{items.map {|r| "'#{r}'"}.join(',')})"
+      @@mysql_client.query(query)
+      rescue => e
+        @@logger.warn("Something wrong with #{query}. Error message: #{e.message}")
+      end
+    end
+  }
 end
 
 def insert_ipaddress(index)
   public_ipv4_addresses(index).map {|ip|
     if @mmdb_client.lookup(ip).found?
       content = @mmdb_client.lookup(ip)
-      content.continent.import!          if content.continent
-      content.country.import!            if content.country
-      content.location.import!           if content.location
-      content.registered_country.import! if content.registered_country
+      content.import(ip)
     end
   }
 end
@@ -123,8 +148,7 @@ end
 create_tables if OPTIONS[:create_db_table]
 
 if OPTIONS[:execute]
-  insert_ipaddress(8)
-  #Parallel.map((0..2).to_a, in_processes: OPTIONS[:number_of_processors]) {|index|
-  #  insert_ipaddress(index)
-  #}
+  Parallel.map((0..255).to_a, in_processes: OPTIONS[:number_of_processors]) {|index|
+    insert_ipaddress(index)
+  }
 end
