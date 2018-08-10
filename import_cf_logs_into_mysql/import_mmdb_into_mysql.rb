@@ -20,6 +20,9 @@ require 'pry'
 # インサートの方針
 # 使用するメモリ容量を削減するために、対象となるipアドレスを一気に生成してしまうのではなく、
 # 順次範囲を決めて生成していき、privateIPでないこと、またMaxMindのDBにデータがあることを確認してからインサートする方式に変更する
+#
+# 実行例
+# ruby import_mmdb_into_mysql.rb -y config/config.yml -d /mnt/datastorage/GeoLite2-City.mmdb -p 24 -e
 ###
 
 OPTIONS = {}
@@ -107,6 +110,9 @@ def public_ipv4_addresses(index)
   ip_address(index)
 end
 
+def execute(query)
+  @@mysql_client.query(query)
+end
 
 def import(ip)
   keys = ['continent', 'country', 'location', 'registered_country']
@@ -124,11 +130,11 @@ def import(ip)
           end
         }
         items = items.flatten
-        result = @@mysql_client.query("desc maxmind.#{k}").map {|r| r}
+        result = execute("desc maxmind.#{k}").map {|r| r}
         result.shift
         column = result.map {|r| "`#{r['Field']}`"}.join(',')
         query = "insert into maxmind.#{k}(#{column}) values(#{items.map {|r| "'#{r}'"}.join(',')})"
-        @@mysql_client.query(query)
+        execue(query)
       rescue => e
         @@logger.warn("Something wrong with #{query}. Error message: #{e.message}")
       end
@@ -136,7 +142,15 @@ def import(ip)
   }
 end
 
+# DBに書くんじゃなくて単純に作成したSQLをファイルに書き出してみる
+def export_to_file(query)
+  open('./output_mmdb.sql', 'a') do |fs|
+    fs << query
+  end
+end
+
 def insert_ipaddress(index)
+  @@logger.info("Start to create IP addresses. First octet is #{index}")
   public_ipv4_addresses(index).map {|ip|
     if @mmdb_client.lookup(ip).found?
       content = @mmdb_client.lookup(ip)
