@@ -1,4 +1,6 @@
 local argparse = require 'argparse'
+local lfs      = require 'lfs'
+local inspect  = require 'inspect'
 
 math.randomseed(os.time())
 local random = math.random
@@ -8,10 +10,6 @@ local parser = argparse(
   "指定した容量(GB)のファイルを作成するスクリプト"
 )
 
-parser:argument(
-  "",
-  "BBBB"
-)
 parser:option(
   "-s --size",
   "File Size(GB)"
@@ -26,7 +24,8 @@ parser:option(
 )
 local args = parser:parse()
 
-print(args)
+print(inspect(args))
+print(inspect(args.directory_path))
 
 -- UUID4もどき
 local function uuid()
