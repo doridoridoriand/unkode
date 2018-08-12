@@ -1,6 +1,11 @@
-local argparse = require 'argparse'
-local lfs      = require 'lfs'
-local inspect  = require 'inspect'
+argparse = require 'argparse'
+lfs      = require 'lfs'
+inspect  = require 'inspect'
+
+--[[
+とりあえず参考になる文章が少なすぎるので、これを参考に実装する
+http://milkpot.sakura.ne.jp/lua/lua52_manual_ja.html
+--]]
 
 math.randomseed(os.time())
 local random = math.random
@@ -36,3 +41,34 @@ local function uuid()
   end
   )
 end
+
+-- try-catch もどき
+ local function try_catch(what)
+   local status, result = pcall(what.try)
+   if not status then
+     what.catch(result)
+   end
+   return result
+ end
+
+-- 対象のファイルの容量を調べて該当の容量に達していたらfrueを返す
+local function is_enough(file_path)
+end
+
+-- 指定した保存ディレクトリのディスク残量が指定したファイルサイズ以下だった場合、例外
+directory_attributes = lfs.attributes(args.directory_path)
+print(inspect(directory_attributes))
+
+
+-- 引数で指定したファイル名のファイルが指定したディレクトリに既に存在する場合、例外
+
+
+try_catch {
+  try = function()
+  end,
+  catch = function(error)
+  end
+}
+
+--repeat
+--until is_enough
