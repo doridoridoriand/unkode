@@ -1,5 +1,6 @@
 {
     "require": {
-        "psy/psysh": "^0.9.3"
+        "psy/psysh": "^0.9.3",
+        "nikic/iter": "^1.6"
     }
 }
