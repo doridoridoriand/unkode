@@ -1,5 +1,6 @@
 argparse = require 'argparse'
-lfs      = require 'lfs'
+lfs      = require 'lfs' -- luafilesystem
+posix    = require 'posix' -- luaposix
 inspect  = require 'inspect'
 
 --[[
