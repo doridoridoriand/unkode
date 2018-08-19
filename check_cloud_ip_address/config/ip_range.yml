@@ -1,0 +1,14 @@
+---
+
+- address_range_list:
+    - aws:
+      - uri: https://ip-ranges.amazonaws.com/ip-ranges.json
+        filetype: json
+        gettype: normal
+    - azure:
+      - uri: https://www.microsoft.com/en-us/download/confirmation.aspx?id=41653
+        filetype: xml
+        gettype: wget
+    - gcp:
+      - uri: _spf.google.com
+        gettype: dig
