@@ -6,9 +6,9 @@
         filetype: json
         gettype: normal
     - azure:
-      - uri: https://www.microsoft.com/en-us/download/confirmation.aspx?id=41653
+      - uri: file://file/azure/PublicIPs_20180813.xml
         filetype: xml
-        gettype: wget
+        gettype: local
     - gcp:
       - uri: _spf.google.com
         gettype: dig
