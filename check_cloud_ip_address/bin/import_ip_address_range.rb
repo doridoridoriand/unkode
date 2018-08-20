@@ -2,6 +2,7 @@ require 'systemu'
 require 'open-uri'
 require 'json'
 require 'ipaddress'
+require 'parallel'
 require 'yaml'
 
 require 'pry'
@@ -10,9 +11,11 @@ ip_range_source = YAML.load_file(File.join(__dir__, '..', 'config', 'ip_range.ym
 
 def normal(vendor_information)
   file = open(vendor_information.values.flatten.first['uri']).read
-  json_data = JSON.parse(file)
-  json_data['prefixes'].map {|r| IPAddress r['ip_prefix']}
-  binding.pry
+  cidrs = JSON.parse(file)['prefixes']
+  ips = Parallel.map(cidrs.map {|r| IPAddress r['ip_prefix']}) do |cidr|
+    cidr.map {|ip| ip.octets.join('.')}
+  end
+  ips.flatten
 end
 
 def wget(vendor_information)
