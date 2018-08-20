@@ -9,7 +9,7 @@ require 'pry'
 
 ip_range_source = YAML.load_file(File.join(__dir__, '..', 'config', 'ip_range.yml'))
 
-def normal(vendor_information)
+def aws(vendor_information)
   file = open(vendor_information.values.flatten.first['uri']).read
   cidrs = JSON.parse(file)['prefixes']
   ips = Parallel.map(cidrs.map {|r| IPAddress r['ip_prefix']}) do |cidr|
@@ -18,13 +18,13 @@ def normal(vendor_information)
   ips.flatten
 end
 
-def wget(vendor_information)
+def azure(vendor_information)
 end
 
-def dig(vendor_information)
+def gcp(vendor_information)
 end
 
 ip_range_source.first['address_range_list'].map {|vendor|
-  send(vendor.values.flatten.first['gettype'], vendor)
+  send(vendor.keys.first, vendor)
 }
 
