@@ -24,6 +24,8 @@ services:
       MYSQL_DATABASE: redash
   redis:
     image: redis:4.0
+    ports:
+      - 6379:6379
   postgres:
     image: postgres:9.6.9
     container_name: postgres
