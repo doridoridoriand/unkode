@@ -1,13 +1,5 @@
-require 'systemu'
-require 'open-uri'
-require 'json'
-require 'rexml/document'
-require 'ipaddress'
-require 'parallel'
-require 'redis'
-require 'yaml'
-
-require 'pry'
+require 'bundler'
+Bundler.require
 
 ip_range_source = YAML.load_file(File.join(__dir__, '..', 'config', 'ip_range.yml'))
 db_config       = YAML.load_file(File.join(__dir__, '..', 'config', 'database.yml'))
