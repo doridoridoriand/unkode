@@ -300,6 +300,7 @@
     <IpRange Subnet="20.37.128.0/18" />
     <IpRange Subnet="20.38.96.0/23" />
     <IpRange Subnet="20.40.192.0/18" />
+    <IpRange Subnet="20.44.8.0/21" />
     <IpRange Subnet="20.184.64.0/18" />
     <IpRange Subnet="20.186.192.0/18" />
     <IpRange Subnet="20.190.134.0/24" />
@@ -483,6 +484,7 @@
     <IpRange Subnet="40.77.192.0/22" />
     <IpRange Subnet="40.77.226.0/25" />
     <IpRange Subnet="40.77.234.128/27" />
+    <IpRange Subnet="40.77.236.192/28" />
     <IpRange Subnet="40.77.252.0/23" />
     <IpRange Subnet="40.79.210.0/24" />
     <IpRange Subnet="40.81.16.0/20" />
@@ -606,6 +608,7 @@
     <IpRange Subnet="20.36.128.0/17" />
     <IpRange Subnet="20.38.100.0/23" />
     <IpRange Subnet="20.41.0.0/18" />
+    <IpRange Subnet="20.44.16.0/21" />
     <IpRange Subnet="20.186.0.0/17" />
     <IpRange Subnet="20.186.128.0/18" />
     <IpRange Subnet="20.190.131.0/24" />
@@ -645,6 +648,7 @@
     <IpRange Subnet="40.77.228.0/24" />
     <IpRange Subnet="40.77.233.0/24" />
     <IpRange Subnet="40.77.234.192/27" />
+    <IpRange Subnet="40.77.236.80/28" />
     <IpRange Subnet="40.77.240.0/25" />
     <IpRange Subnet="40.77.245.0/24" />
     <IpRange Subnet="40.77.248.0/25" />
@@ -672,6 +676,7 @@
     <IpRange Subnet="40.79.94.0/24" />
     <IpRange Subnet="40.79.95.0/28" />
     <IpRange Subnet="40.82.4.0/22" />
+    <IpRange Subnet="40.82.44.0/22" />
     <IpRange Subnet="40.84.0.0/17" />
     <IpRange Subnet="40.87.168.0/22" />
     <IpRange Subnet="40.90.130.160/27" />
@@ -1182,6 +1187,7 @@
     <IpRange Subnet="40.77.231.0/24" />
     <IpRange Subnet="40.77.234.0/25" />
     <IpRange Subnet="40.77.236.32/27" />
+    <IpRange Subnet="40.77.236.160/28" />
     <IpRange Subnet="40.77.248.128/25" />
     <IpRange Subnet="40.78.208.64/28" />
     <IpRange Subnet="40.78.222.0/24" />
@@ -1201,6 +1207,7 @@
     <IpRange Subnet="52.237.128.0/18" />
     <IpRange Subnet="52.239.149.0/24" />
     <IpRange Subnet="52.239.186.0/24" />
+    <IpRange Subnet="52.239.253.0/24" />
     <IpRange Subnet="52.240.128.0/17" />
     <IpRange Subnet="52.245.72.0/22" />
     <IpRange Subnet="52.251.128.0/17" />
@@ -1347,6 +1354,7 @@
     <IpRange Subnet="40.77.229.0/24" />
     <IpRange Subnet="40.77.234.160/27" />
     <IpRange Subnet="40.77.236.0/27" />
+    <IpRange Subnet="40.77.236.176/28" />
     <IpRange Subnet="40.78.211.0/24" />
     <IpRange Subnet="40.85.0.0/17" />
     <IpRange Subnet="40.85.128.0/20" />
@@ -1828,6 +1836,7 @@
     <IpRange Subnet="40.90.143.96/27" />
     <IpRange Subnet="40.90.151.0/26" />
     <IpRange Subnet="40.90.151.128/28" />
+    <IpRange Subnet="40.90.152.0/25" />
     <IpRange Subnet="40.126.8.0/24" />
     <IpRange Subnet="52.109.136.0/22" />
     <IpRange Subnet="52.136.4.0/22" />
