@@ -4,6 +4,9 @@ Bundler.require
 ip_range_source = YAML.load_file(File.join(__dir__, '..', 'config', 'ip_range.yml'))
 db_config       = YAML.load_file(File.join(__dir__, '..', 'config', 'database.yml'))
 
+@logger = Logger.new STDOUT
+@logger.level = Logger::INFO
+
 public
 
 def aws(vendor_information)
@@ -34,6 +37,7 @@ def ip_lists
 end
 
 vendor_ips = ip_range_source.first['address_range_list'].map {|vendor|
+  @logger.info("Start to parse #{vendor.keys.first}")
   {vendor.keys.first.to_sym => send(vendor.keys.first, vendor)}
 }
 
