@@ -15,5 +15,6 @@ gem 'bundler', :require => [
   'open-uri',
   'json',
   'rexml/document',
-  'yaml'
+  'yaml',
+  'logger'
 ]
