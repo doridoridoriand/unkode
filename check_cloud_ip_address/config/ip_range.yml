@@ -6,7 +6,7 @@
         filetype: json
         gettype: normal
     - azure:
-      - uri: file://file/azure/PublicIPs_20180813.xml
+      - uri: file://file/azure/PublicIPs_20180820.xml
         filetype: xml
         gettype: local
     - gcp:
