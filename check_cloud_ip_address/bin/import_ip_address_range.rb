@@ -27,6 +27,19 @@ def azure(vendor_information)
 end
 
 def gcp(vendor_information)
+  pid, res = systemu "dig -t txt #{vendor_information['gcp'].first['uri']} +short"
+  netblocks_txt = res.split(' ').map {|r|
+    r if r.include?('include')
+  }.compact.map {|r|
+    r.split(':').last
+  }
+  cidrs = netblocks_txt.map {|r|
+    pid, res = systemu "dig -t txt #{r} +short"
+    res.split(' ').map {|r|
+      r if r.include?('ip4')
+    }.compact
+  }.flatten.map {|r| r.split(':').last}
+  cidrs.ip_lists
 end
 
 def ip_lists
