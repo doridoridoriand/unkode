@@ -4,6 +4,10 @@ Bundler.require
 ip_range_source = YAML.load_file(File.join(__dir__, '..', 'config', 'ip_range.yml'))
 db_config       = YAML.load_file(File.join(__dir__, '..', 'config', 'database.yml'))
 
+redis = Redis.new(host: db_config.first['redis']['host'],
+                  port: db_config.first['redis']['port'],
+                  db:   db_config.first['redis']['db'])
+
 @logger = Logger.new STDOUT
 @logger.level = Logger::INFO
 
@@ -54,3 +58,8 @@ vendor_ips = ip_range_source.first['address_range_list'].map {|vendor|
   {vendor.keys.first.to_sym => send(vendor.keys.first, vendor)}
 }
 
+vendor_ips.map {|r|
+  r.values.flatten.map {|ip|
+    redis.set(ip, r.keys.first.to_s)
+  }
+}
