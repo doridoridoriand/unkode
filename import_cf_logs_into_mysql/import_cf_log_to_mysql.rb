@@ -18,7 +18,7 @@ end
 raise OptionParser::MissingArgument, 'DirectoryPathNotDetectedError'     unless OPTIONS[:directory_path]
 raise OptionParser::MissingArgument, 'ConfigureFilePathNotDetectedError' unless OPTIONS[:yaml_file_path]
 
-mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['mysql']
+mysql_config = YAML.load_file(OPTIONS[:yaml_file_path])['cflog']
 
 @logger = Logger.new STDOUT
 @logger.level = Logger::INFO
@@ -64,7 +64,7 @@ def insert_row
   column.shift
   column = column.map {|r| "`#{r}`"}.join(',')
 
-  rows   = @log_file_pathes.sample(300).map {|r| r.log_contents}
+  rows   = @log_file_pathes.map {|r| r.log_contents}
   @logger.info("Log files load completed.")
   fields = rows.map {|r| r.to_arrays}.map {|r| r.map {|f| f if f.count > 1}.compact}
   fields.map {|file| file.map {|r|
