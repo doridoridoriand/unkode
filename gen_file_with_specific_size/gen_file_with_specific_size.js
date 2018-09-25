@@ -1,5 +1,7 @@
-let argv = require('argv');
+let argv   = require('argv');
 let crypto = require('crypto');
+let path   = require('path');
+let fs     = require('fs');
 
 argv.option({
   name:        'size',
@@ -24,10 +26,20 @@ argv.option({
 });
 arguments = argv.run();
 
+// すべて必須項目なので、一つでもなかったら例外
+
 console.log(arguments);
 
 function hex128() {
   // なんかtoString('hex')で変換すると256文字帰ってくるので半分の64bytesで生成している
   return crypto.randomBytes(64).toString('hex');
 }
+
+// 指定したディレクトリが存在しなかったら例外
+
+debugger;
+
+directory_exists = path.dirname();
+
+// 指定したファイルがすでに存在したら例外
 
