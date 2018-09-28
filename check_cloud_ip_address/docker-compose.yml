@@ -1,7 +1,14 @@
 version: '3'
 services:
+  apcontainer:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - redis
   redis:
     image: redis:4.0
-    ports: 6379:6379
-    vlumes:
+    ports:
+      - 6379:6379
+    volumes:
       - ./data:/data
