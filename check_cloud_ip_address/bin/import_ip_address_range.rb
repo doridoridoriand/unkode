@@ -60,6 +60,7 @@ vendor_ips = ip_range_source.first['address_range_list'].map {|vendor|
 
 vendor_ips.map {|r|
   r.values.flatten.map {|ip|
+    @logger.info("IPAddress: #{ip}, Vendor: #{r.keys.first.to_s}")
     redis.set(ip, r.keys.first.to_s)
   }
 }
