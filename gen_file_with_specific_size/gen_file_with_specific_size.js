@@ -27,8 +27,9 @@ argv.option({
 arguments = argv.run();
 
 // すべて必須項目なので、一つでもなかったら例外
-
-console.log(arguments);
+if (!arguments.options.filename)      { console.warn('NoFilenameDetectedError');      process.exit(1); }
+if (!arguments.options.directoy_path) { console.warn('NoDirectoryPathDetectedError'); process.exit(1); }
+if (!arguments.options.size)          { console.warn('NoFileSizeDetectedError');      process.exit(1); }
 
 function hex128() {
   // なんかtoString('hex')で変換すると256文字帰ってくるので半分の64bytesで生成している
@@ -37,7 +38,6 @@ function hex128() {
 
 // 指定したディレクトリが存在しなかったら例外
 
-debugger;
 
 directory_exists = path.dirname();
 
