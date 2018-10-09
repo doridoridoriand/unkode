@@ -4,8 +4,9 @@
   "description": "",
   "main": "gen_file_with_specific_size.js",
   "dependencies": {
-    "argv": "^0.0.2",
-    "crypto": "^1.0.1"
+    "argv": "0.0.2",
+    "crypto": "^1.0.1",
+    "path": "^0.12.7"
   },
   "devDependencies": {},
   "scripts": {
