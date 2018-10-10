@@ -73,5 +73,3 @@ if __name__ == '__main__':
             fs.close()
             sys.exit()
 
-
-    pdb.set_trace()
