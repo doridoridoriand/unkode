@@ -11,7 +11,7 @@ argv.option({
   example:     '--size=10 or -s 10'
 });
 argv.option({
-  name:        'directory-path',
+  name:        'directory_path',
   short:       'd',
   type:        'string',
   description: 'Please input absolute directory path.',
@@ -27,9 +27,9 @@ argv.option({
 arguments = argv.run();
 
 // すべて必須項目なので、一つでもなかったら例外
-if (!arguments.options.filename)      { console.warn('NoFilenameDetectedError');      process.exit(1); }
-if (!arguments.options.directoy_path) { console.warn('NoDirectoryPathDetectedError'); process.exit(1); }
-if (!arguments.options.size)          { console.warn('NoFileSizeDetectedError');      process.exit(1); }
+if (!arguments.options.filename)       { console.error('NoFilenameDetectedError');      process.exit(1); }
+if (!arguments.options.directory_path) { console.error('NoDirectoryPathDetectedError'); process.exit(1); }
+if (!arguments.options.size)           { console.error('NoFileSizeDetectedError');      process.exit(1); }
 
 function hex128() {
   // なんかtoString('hex')で変換すると256文字帰ってくるので半分の64bytesで生成している
@@ -37,9 +37,18 @@ function hex128() {
 }
 
 // 指定したディレクトリが存在しなかったら例外
-
-
-directory_exists = path.dirname();
+fs.stat(arguments.options.directory_path, function (err, stats) {
+  if (err) {
+    console.warn(err.message);
+    process.exit(1);
+  }
+});
 
 // 指定したファイルがすでに存在したら例外
+fs.stat([arguments.options.directory_path, arguments.options.filename].join('/'), function (err, stats) {
+  if (stats) {
+    throw new Error('the file already exists');
+  }
+});
 
+// 指定した容量が保存先のディスクの容量を上回っていたら例外で終了
