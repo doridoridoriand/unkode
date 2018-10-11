@@ -3,6 +3,8 @@ services:
   clickhouse:
     image: yandex/clickhouse-server:1.1
     container_name: clickhouse
+    ports:
+      - 8123:8123
     ulimits:
       memlock:
         soft: -1
