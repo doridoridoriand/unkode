@@ -1,7 +1,8 @@
-let argv   = require('argv');
-let crypto = require('crypto');
-let path   = require('path');
-let fs     = require('fs');
+let argv      = require('argv');
+let crypto    = require('crypto');
+let path      = require('path');
+let fs        = require('fs');
+let diskspace = require('diskspace');
 
 argv.option({
   name:        'size',
@@ -52,3 +53,7 @@ fs.stat([arguments.options.directory_path, arguments.options.filename].join('/')
 });
 
 // 指定した容量が保存先のディスクの容量を上回っていたら例外で終了
+diskspace.check(arguments.options.directory_path, function (err, status) {
+  debugger;
+});
+
