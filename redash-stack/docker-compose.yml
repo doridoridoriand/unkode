@@ -1,10 +1,11 @@
 version: '3'
 services:
-  clickhouse:
+  clickhouse-server:
     image: yandex/clickhouse-server:1.1
-    container_name: clickhouse
+    container_name: clickhouse-server
     ports:
       - 8123:8123
+      - 9000:9000
     ulimits:
       memlock:
         soft: -1
@@ -14,6 +15,11 @@ services:
         hard: 65535
     volumes:
       - ./clickhouse/data:/var/lib/clickhouse
+  clickhouse-client:
+    image: yandex/clickhouse-client:18.12
+    container_name: clickhouse-client
+    depends_on:
+      - clickhouse-server
   mysql:
     image: mysql:5.7.22
     container_name: mysql
