@@ -39,4 +39,8 @@ services:
       MYSQL_USER: node
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
-
+  adminer:
+    image: adminer:4.6-standalone
+    container_name: adminer
+    ports:
+      - 18080:8080
