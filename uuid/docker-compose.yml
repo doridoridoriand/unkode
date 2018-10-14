@@ -1,0 +1,42 @@
+version: '3'
+services:
+  ruby_uuid:
+    image: mysql:8.0
+    container_name: ruby_uuid
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./mysql_data/ruby:/var/lib/mysql
+    ports:
+      - 13306:3306
+    environment:
+      MYSQL_DATABASE: uuid
+      MYSQL_USER: ruby
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+  python_uuid:
+    image: mysql:8.0
+    container_name: python_uuid
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./mysql_data/python:/var/lib/mysql
+    ports:
+      - 13307:3306
+    environment:
+      MYSQL_DATABASE: uuid
+      MYSQL_USER: python
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+  node_uuid:
+    image: mysql:8.0
+    container_name: node_uuid
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./mysql_data/node:/var/lib/mysql
+    ports:
+      - 13308:3306
+    environment:
+      MYSQL_DATABASE: uuid
+      MYSQL_USER: node
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+
