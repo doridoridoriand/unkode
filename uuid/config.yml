@@ -1,0 +1,30 @@
+ruby:
+  host: 127.0.0.1
+  port: 13306
+  username: root
+  password: password
+  database: ruby
+python:
+  host: 127.0.0.1
+  port: 13307
+  username: root
+  password: password
+  database: python
+node:
+  host: 127.0.0.1
+  port: 13308
+  username: root
+  password: password
+  database: node
+php:
+  host: 127.0.0.1
+  port: 13308
+  username: root
+  password: password
+  database: php
+lua:
+  host: 127.0.0.1
+  port: 13309
+  username: root
+  password: password
+  database: lua
