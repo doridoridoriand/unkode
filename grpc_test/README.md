@@ -22,3 +22,9 @@ $ pip install --upgrade pip
 $ pip install grpcio
 $ pip install grpcio-tools googleapis-common-protos
 ```
+
+proto定義からpython用のserviceファイルを作成(protoファイルのシンタックスチェックも兼ねている)
+
+```
+$ python -m grpc_tools.protoc -I=. --python_out=./lib --grpc_python_out=./lib test.proto
+```
