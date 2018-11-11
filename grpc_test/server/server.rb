@@ -4,7 +4,7 @@ require 'yaml'
 require 'server_base'
 Bundler.require
 
-config = YAML.load_file(File.join(__dir__, '..', 'config', 'server.yml'))['server']
+config = YAML.load_file(File.join(__dir__, '..', 'config', 'server.yml'))['listen']
 
 server = GRPC::RpcServer.new
 server.add_http2_port("#{config['host']}:#{config['port']}", :this_port_is_insecure)
