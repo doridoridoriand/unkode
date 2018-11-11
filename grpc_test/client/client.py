@@ -1,8 +1,10 @@
 import os
 import sys
 import yaml
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
+import grpc
+import argparse
 
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
 import test_pb2
 import test_pb2_grpc
 
@@ -10,11 +12,21 @@ import pdb
 
 config = yaml.load(open(os.path.join(os.path.dirname(__file__), '..', 'config', 'client.yml')))['endpoint']
 
-pdb.set_trace()
-
 if __name__ == '__main__':
-    with grpc.insecure_channel() as channel:
+    parser = argparse.ArgumentParser(description = 'GRPC client for test')
+    parser.add_argument('-u', '--username',
+                        action = 'store',
+                        nargs = None,
+                        const = None,
+                        default = None,
+                        type = str,
+                        choices = None,
+                        required = True,
+                        help = 'Please input a username.')
+    arguments = parser.parse_args()
+
+    with grpc.insecure_channel(':'.join([config['host'], str(config['port'])])) as channel:
         stub = test_pb2_grpc.GreeterStub(channel)
-        response = stub.SayHelo(test_pb2.HelloRequest(name=''))
+        response = stub.SayHello(test_pb2.HelloRequest(name=arguments.username))
 
     print(response.message)
