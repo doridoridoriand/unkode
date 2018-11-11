@@ -1,2 +1,3 @@
 lib/*_pb.rb
 lib/*_pb2*.py
+package-lock.json
