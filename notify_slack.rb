@@ -4,8 +4,8 @@ require 'optparse'
 
 OPTIONS = {}
 OptionParser.new do |opt|
-  opt.on('-b bot_url',     'Slack Bot URL',                     String) {|v| OPTIONS[:bot_url]     = v}
-  opt.on('-d description', 'Description what you want to post', String) {|v| OPTIONS[:description] = v}
+  opt.on('-b bot_url',     '--bot_url',     String) {|v| OPTIONS[:bot_url]     = v}
+  opt.on('-d description', '--description', String) {|v| OPTIONS[:description] = v}
   opt.parse!(ARGV)
 end
 
