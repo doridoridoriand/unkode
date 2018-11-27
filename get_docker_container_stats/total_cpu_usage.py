@@ -32,25 +32,25 @@ def containers():
     """
     return client.containers.list()
 
-def all_cpu_usage(metrix):
+def all_cpu_usage(metrics):
     """
-    @param  Type: list, Param: metrix, Description: cpu metrix list
+    @param  Type: list, Param: metrics, Description: cpu metrics list
     @return Type: float
     """
-    usage = [obj['cpu_percent'] for obj in metrix]
+    usage = [obj['cpu_percent'] for obj in metrics]
     return sum(usage) / len(usage)
 
 def output(content):
     f = open(arguments.output, 'w')
     f.write(str(content))
 
-def cpu_usage(metrix, container_number):
+def cpu_usage(metrics, container_number):
     """
-    @param  Type: list,    Param: metrix, Description: cpu metrix list
-    @param  Type: Integer, Param: metrix, Description: container number
+    @param  Type: list,    Param: metrics, Description: cpu metrics list
+    @param  Type: Integer, Param: metrics, Description: container number
     @return Type: float
     """
-    return metrix[container_number]['cpu_percent']
+    return metrics[container_number]['cpu_percent']
 
 
 if __name__ == '__main__':
@@ -84,7 +84,7 @@ if __name__ == '__main__':
         raise TooMuchOptionsAreSelectedError()
 
     containers = containers()
-    metrix = []
+    metrics = []
     for container in containers:
         container        = container_attr(container.id)
         container_information = container_status(container)
@@ -95,20 +95,20 @@ if __name__ == '__main__':
         online_cpus         = container_information['cpu_stats']['online_cpus']
         delta_cpu_usage     = total_cpu_usage - pretotal_cpu_usage
         cpu_percent         = float(delta_cpu_usage) / float(NANOCPUS_SCALE) * 100
-        metrix.append({'container_name':     container_name,
+        metrics.append({'container_name':     container_name,
          'total_cpu_usage':    total_cpu_usage,
          'pretotal_cpu_usage': pretotal_cpu_usage,
          'delta_cpu_usage':    delta_cpu_usage,
          'cpu_percent':        cpu_percent})
 
     if arguments.all == True and arguments.output == None:
-        print(all_cpu_usage(metrix))
+        print(all_cpu_usage(metrics))
 
     if arguments.all == True and arguments.output != None:
-        output(all_cpu_usage(metrix))
+        output(all_cpu_usage(metrics))
 
     if arguments.number != None and arguments.output == None:
-        print(cpu_usage(metrix, arguments.number))
+        print(cpu_usage(metrics, arguments.number))
 
     if arguments.number != None and arguments.output != None:
-        output(cpu_usage(metrix, arguments.number))
+        output(cpu_usage(metrics, arguments.number))
