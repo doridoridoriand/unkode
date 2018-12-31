@@ -26,6 +26,6 @@ rsa==3.4.2
 s3transfer==0.1.9
 simplejson==3.10.0
 six==1.10.0
-urllib3==1.22
+urllib3>=1.23
 websocket-client==0.48.0
 Werkzeug==0.12.2
