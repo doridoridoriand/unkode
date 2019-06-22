@@ -17,6 +17,7 @@ def aws(vendor_information)
   file = open(vendor_information.values.flatten.first['uri']).read
   res = JSON.parse(file)['prefixes']
   cidrs = res.map {|r| r['ip_prefix']}
+  @logger.info("Number of IPaddresses: #{cidrs.ip_lists.count}")
   cidrs.ip_lists
 end
 
@@ -27,6 +28,7 @@ def azure(vendor_information)
     elem
   end
   cidrs = res.map {|r| r['Subnet']}
+  @logger.info("Number of IPaddresses: #{cidrs.ip_lists.count}")
   cidrs.ip_lists
 end
 
@@ -43,6 +45,7 @@ def gcp(vendor_information)
       r if r.include?('ip4')
     }.compact
   }.flatten.map {|r| r.split(':').last}
+  @logger.info("Number of IPaddresses: #{cidrs.ip_lists.count}")
   cidrs.ip_lists
 end
 
