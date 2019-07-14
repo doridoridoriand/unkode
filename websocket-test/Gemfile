@@ -4,5 +4,8 @@ source "https://rubygems.org"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-gem 'faye/websocket'
+gem 'rack'
+gem 'thin'
+gem 'faye-websocket'
 gem 'eventmachine'
+gem 'pry'
