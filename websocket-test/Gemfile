@@ -9,3 +9,7 @@ gem 'thin'
 gem 'faye-websocket'
 gem 'eventmachine'
 gem 'pry'
+
+gem 'bundler', :require => [
+  'logger'
+]
