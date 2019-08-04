@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+Cuba.use Rack::Session::Cookie, :secret => "__a_very_long_string__"
+
+Cuba.plugin Cuba::Safe
+
+Cuba.define do
+  on root do
+    res.write JSON.dump({uuid: SecureRandom.uuid})
+  end
+end
