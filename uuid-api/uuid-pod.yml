@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: uuid-api-pod
+  namespace: doridoridoriand
+spec:
+  containers:
+    - name: uuid-api-container
+      image: doridoridoriand/uuid-api:0.0.1
+      ports:
+        - containerPort: 3000

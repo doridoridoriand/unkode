@@ -1,10 +1,12 @@
 ---
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
-  name: uuid-api-replicaset
+  name: uuid-api-deployment
   namespace: doridoridoriand
 spec:
+  strategy:
+    type: RollingUpdate
   replicas: 3
   selector:
     matchLabels:
@@ -12,7 +14,6 @@ spec:
   template:
     metadata:
       labels:
-        app: uuid-api
         labelName: uuid-api-label
     spec:
       containers:
