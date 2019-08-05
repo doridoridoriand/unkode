@@ -25,7 +25,7 @@ $ unicorn -c unicorn.rb --env development
 $ docker build -t uuid-api ./
 ```
 
-## docker container execute
+## docker container execution
 ```
 $ docker run -it uuid-api
 ```
