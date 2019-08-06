@@ -5,7 +5,7 @@ metadata:
   name: uuid-api-deployment
   namespace: doridoridoriand
 spec:
-  replicas: 10
+  replicas: 20
   selector:
     matchLabels:
       app: uuid-api-app
@@ -18,6 +18,10 @@ spec:
       containers:
         - name: uuid-api-container
           image: doridoridoriand/uuid-api:0.0.1
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 512m
           ports:
             - containerPort: 3000
 ---
