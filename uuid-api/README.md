@@ -5,29 +5,29 @@
 - Docker >= 18.6
 
 
-# Execute direct
+# Execute at local (Ruby)
 ## Installation
 ```
 $ gem install bundler
 $ bundle install
 ```
 
-## Execute
+## Execute (Ruby)
 ```
 $ unicorn -c unicorn.rb
 e.g. execute in develop environment
 $ unicorn -c unicorn.rb --env development
 ```
 
-# Execute with docker
+# Execute with docker (Ruby)
 ## docker build
 ```
-$ docker build -t uuid-api ./
+$ docker build -t uuid-api-ruby ./ruby
 ```
 
 ## docker container execution
 ```
-$ docker run -it uuid-api
+$ docker run -it uuid-api-ruby
 ```
 
 If you not want to build container at local environment, you can pull the image from dockerhub.
