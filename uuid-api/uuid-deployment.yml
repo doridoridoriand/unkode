@@ -10,11 +10,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      labelName: uuid-api-label
+      app: uuid-api
   template:
     metadata:
       labels:
-        labelName: uuid-api-label
+        app: uuid-api
     spec:
       containers:
         - name: uuid-api-container
