@@ -5,7 +5,7 @@ metadata:
   name: uuid-api-deployment
   namespace: doridoridoriand
 spec:
-  replicas: 20
+  replicas: 6
   selector:
     matchLabels:
       app: uuid-api-app
