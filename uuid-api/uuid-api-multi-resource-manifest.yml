@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: uuid-api-container
-          image: doridoridoriand/uuid-api:0.0.1
+          image: doridoridoriand/uuid-api:10-uuids
           resources:
             requests:
               cpu: 1000m
