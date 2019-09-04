@@ -39,3 +39,40 @@ spec:
       targetPort: 3000
   selector:
       app: uuid-api-app
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: uuid-api-alb-service
+  namespace: doridoridoriand
+spec:
+  type: NodePort
+  ports:
+    - name: "http-port"
+      protocol: "TCP"
+      port: 3000
+      targetPort: 3000
+  selector:
+      app: uuid-api-app
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: uuid-api-ingress
+  namespace: doridoridoriand
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/inbound-cidrs: 0.0.0.0/0
+    alb.ingress.kubernetes.io/tags: env=dev,app=uuid-api
+    alb.ingress.kubernetes.io/healthcheck-path: /
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: uuid-api-alb-service
+              servicePort: 3000
