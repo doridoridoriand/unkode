@@ -1,4 +1,4 @@
-curl $1 -o /dev/null -w \
+curl $1 --max-time 1 -o /dev/null -w \
 "\
 %{url_effective}への接続を開始。
 名前解決の実行...\n\
