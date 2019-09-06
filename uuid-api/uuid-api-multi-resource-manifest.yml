@@ -68,6 +68,7 @@ metadata:
     alb.ingress.kubernetes.io/inbound-cidrs: 0.0.0.0/0
     alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=1
     alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=1
+    alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/tags: env=dev,app=uuid-api
     alb.ingress.kubernetes.io/healthcheck-path: /
 spec:
