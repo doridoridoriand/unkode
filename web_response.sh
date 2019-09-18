@@ -1,3 +1,4 @@
+#!/bin/bash
 curl $1 --max-time 10 -o /dev/null -w \
 "\
 %{url_effective}への接続を開始。
