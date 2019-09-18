@@ -1,3 +1,10 @@
+#!/usr/bin/env ruby
+require 'unicorn'
+require 'unicorn/worker_killer'
+require 'securerandom'
+require 'cuba'
+require 'cuba/safe'
+
 worker_processes 16
 working_directory __dir__
 
