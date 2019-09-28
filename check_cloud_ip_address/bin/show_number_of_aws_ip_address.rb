@@ -4,8 +4,6 @@ require 'open-uri'
 require 'logger'
 require 'pry'
 
-public
-
 logger = Logger.new STDOUT
 logger.info('Start to parse IP Address ranges of AWS.')
 

@@ -5,8 +5,6 @@ require 'open-uri'
 require 'logger'
 require 'pry'
 
-public
-
 logger = Logger.new STDOUT
 logger.info('Start to parse IP Address ranges of GCP.')
 
@@ -17,7 +15,6 @@ netblocks_txt = res.split(' ').map {|r|
   r.split(':').last
 }
 cidrs = netblocks_txt.map {|r|
-  binding.pry
   pid, res = systemu "dig -t txt #{r} +short"
   res.split(' ').map {|r|
     r if r.include?('ip4')
