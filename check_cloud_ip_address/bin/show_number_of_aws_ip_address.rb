@@ -15,7 +15,6 @@ logger.info("Number of CIDR blocks: #{cidrs.count}")
 
 ips = Parallel.map(cidrs.map {|r| IPAddress r}) do |cidr|
   cidr.map {|ip| ip.octets.join('.')}
-end
-ips.flatten
+end.flatten
 
 logger.info("Completed to calculate number of IP addresses. Number of IP address of AWS: #{ips.flatten.count}")
