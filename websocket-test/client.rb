@@ -10,7 +10,6 @@ EM.run {
 
   client.on :message do |event|
     p :message
-    binding.pry
     p event.data
   end
 
