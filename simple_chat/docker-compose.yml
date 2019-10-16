@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  frontend:
+    image: doridoridoriand/simple_chat-client:0.0.1
+    ports:
+      - "10080:80"
+  server:
+    image: doridoridoriand/simple_chat-server:0.0.1
+    ports:
+      - "13000:3000"
