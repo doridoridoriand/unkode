@@ -1,6 +1,7 @@
 require 'parallel'
 require 'ipaddress'
 require 'open-uri'
+require 'json'
 require 'logger'
 require 'pry'
 
