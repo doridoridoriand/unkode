@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-cluster-deployment
+  namespace: doridoridoriand
+spec:
+  replicas: 120
+  selector:
+    matchLabels:
+      app: nginx-cluster-app
+  template:
+    metadata:
+      namespace: doridoridoriand
+      labels:
+        app: nginx-cluster-app
+    spec:
+      containers:
+        - name: nginx-cluster-container
+          image: nginx:1.17.5
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 2000Mi
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-cluster-service
+  namespace: doridoridoriand
+spec:
+  type: LoadBalancer
+  ports:
+    - name: "http-port"
+      protocol: "TCP"
+      port: 80
+      targetPort: 80
+  selector:
+      app: nginx-cluster-app
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-cluster-alb-service
+  namespace: doridoridoriand
+spec:
+  type: NodePort
+  ports:
+    - name: "http-port"
+      protocol: "TCP"
+      port: 80
+      targetPort: 80
+  selector:
+      app: nginx-cluster-app
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-cluster-ingress
+  namespace: doridoridoriand
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/inbound-cidrs: 0.0.0.0/0
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=1
+    alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=1
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/subnets: subnet-xxxxxxxxxxxxxxxxx,subnet-xxxxxxxxxxxxxxxxx,subnet-xxxxxxxxxxxxxxxxx
+    alb.ingress.kubernetes.io/tags: env=dev,app=nginx-cluster
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '2'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '5'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: nginx-cluster-alb-service
+              servicePort: 80
