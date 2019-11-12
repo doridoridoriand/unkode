@@ -21,7 +21,7 @@ spec:
           resources:
             requests:
               cpu: 1000m
-              memory: 512m
+              memory: 1024Mi
           ports:
             - containerPort: 3000
           livenessProbe:
