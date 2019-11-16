@@ -5,3 +5,14 @@
 
 ## Installation
 - pipenv run
+
+## Run
+Standalone
+```
+$ python app.py
+```
+
+with Gunicron
+```
+$ gunicorn -k uvicorn.workers.UvicornWorker app:api
+```
