@@ -37,6 +37,7 @@ while true
       end
       r << SecureRandom.hex(128)
     end
+    loop_counter = loop_counter + 1
   rescue
     exit
   end
