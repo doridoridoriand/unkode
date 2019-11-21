@@ -26,12 +26,14 @@ absolute_file_path = "#{OPTIONS[:directory_path]}/#{OPTIONS[:filename]}.txt"
 # 既にファイルが指定したディレクトリに存在する場合、例外とする
 raise StandardError, 'FileAlreadyExistsError' if File.file?(absolute_file_path)
 
+loop_counter = 0
 while true
   begin
     File.open(absolute_file_path, 'a') do |r|
-      #binding.pry
-      if File.size(absolute_file_path) >= OPTIONS[:size] * 1024 * 1024 * 1024
-        raise StandardError, 'FileSizeReachedError'
+      if loop_counter % 1000 === 0
+        if File.size(absolute_file_path) >= OPTIONS[:size] * 1024 * 1024 * 1024
+          raise StandardError, 'FileSizeReachedError'
+        end
       end
       r << SecureRandom.hex(128)
     end

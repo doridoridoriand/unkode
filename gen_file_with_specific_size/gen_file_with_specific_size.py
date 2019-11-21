@@ -67,11 +67,14 @@ if __name__ == '__main__':
 
     fs = open(absolute_filepath, 'w')
 
+    loop_counter = 0
     while True:
         try:
-            if int(os.path.getsize(absolute_filepath)) >= (arguments.size * 1024 * 1024 * 1024):
-                raise Exception('FilesizeReachedError')
             fs.write(gen_hex())
+            if loop_counter % 1000 == 0:
+                if int(os.path.getsize(absolute_filepath)) >= (arguments.size * 1024 * 1024 * 1024):
+                    raise Exception('FilesizeReachedError')
+            loop_counter += 1
         except Exception as err:
             fs.close()
             sys.exit()
