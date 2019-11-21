@@ -1,7 +1,7 @@
 # エトラステネスの篩
-class PrimeNum
-@@max_num = 5000
 
+class PrimeNum
+@@max_num = ARGV[0].to_i
   def gen_number_array
     array = []
     for i in 1..@@max_num do
