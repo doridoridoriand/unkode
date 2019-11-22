@@ -1,29 +1,37 @@
-require 'pry'
-require 'parallel'
 require 'bigdecimal'
 require 'optparse'
 
-OPTIONS = {}
+OPTIONS = {
+  repeatable: false
+}
 OptionParser.new do |opt|
-  opt.on('-c core', 'Number of Cores', Integer) {|v| OPTIONS[:cores] = v}
   opt.on('-r repeatable', '--repeatable')       {|v| OPTIONS[:repeatable] = v}
   opt.parse!
 end
 
-num_of_repeats = 10
-accuracy       = 1000
+public
 
-a = BigDecimal(1)
-b = BigDecimal(1) / BigDecimal(2).sqrt(accuracy)
-t = BigDecimal(1) / 4
-p = BigDecimal(1)
+def calc_pi
+  num_of_repeats = 10
 
-for i in 1..num_of_repeats do
-  an = (a + b) / 2
-  b = (a * b).sqrt(accuracy)
-  t -= p * (an - a) * (an - a)
-  p *= 2
-  a = an
+  a = BigDecimal(1)
+  b = BigDecimal(1) / BigDecimal(2).sqrt(2)
+  t = BigDecimal(1) / 4
+  p = BigDecimal(1)
+
+  for i in 1..num_of_repeats do
+    an = (a + b) / 2
+    b = (a * b).sqrt(2)
+    t -= p * (an - a) * (an - a)
+    p *= 2
+    a = an
+  end
+
+  puts ((a + b) * (a + b) / (4 * t)).to_s[0, 2 ** num_of_repeats]
 end
 
-puts ((a + b) * (a + b) / (4 * t)).round(2 ** num_of_repeats)
+calc_pi
+
+while OPTIONS[:repeatable] do
+  calc_pi
+end
