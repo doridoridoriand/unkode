@@ -5,7 +5,7 @@ OPTIONS = {
   repeatable: false
 }
 OptionParser.new do |opt|
-  opt.on('-r repeatable', '--repeatable')       {|v| OPTIONS[:repeatable] = v}
+  opt.on('-r', '--repeatable') {|v| OPTIONS[:repeatable] = v}
   opt.parse!
 end
 
