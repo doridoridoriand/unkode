@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: waste-cpu-resource-deployment
+  namespace: doridoridoriand
+spec:
+  replicas: 48
+  selector:
+    matchLabels:
+      app: waste-cpu-resource-app
+  template:
+    metadata:
+      namespace: doridoridoriand
+      labels:
+        app: waste-cpu-resource-app
+    spec:
+      containers:
+        - name: waste-cpu-resource-container
+          image: doridoridoriand/waste_cpu_resource:0.0.1
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 1000Mi
