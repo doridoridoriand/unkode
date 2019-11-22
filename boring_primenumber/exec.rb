@@ -35,9 +35,9 @@ class PrimeNum
     delete_multiple(array).each do |node|
       delete_multiple(array)
     end
-    puts delete_multiple(array).sort
+    delete_multiple(array).sort
   end
 end
 
 pm = PrimeNum.new
-pm.gen_prime
+puts pm.gen_prime.join(',')
