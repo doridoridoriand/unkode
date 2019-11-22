@@ -10,19 +10,20 @@ OptionParser.new do |opt|
   opt.parse!
 end
 
-accuracy = 10
+num_of_repeats = 10
+accuracy       = 1000
 
 a = BigDecimal(1)
-b = BigDecimal(1) / BigDecimal(2).sqrt(2)
+b = BigDecimal(1) / BigDecimal(2).sqrt(accuracy)
 t = BigDecimal(1) / 4
 p = BigDecimal(1)
 
-for i in 1..accuracy do
+for i in 1..num_of_repeats do
   an = (a + b) / 2
-  b = (a * b).sqrt(2)
+  b = (a * b).sqrt(accuracy)
   t -= p * (an - a) * (an - a)
   p *= 2
   a = an
 end
 
-puts ((a + b) * (a + b) / (4 * t)).round(2 ** accuracy)
+puts ((a + b) * (a + b) / (4 * t)).round(2 ** num_of_repeats)
