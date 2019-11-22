@@ -2,10 +2,10 @@ require 'bigdecimal'
 require 'optparse'
 
 OPTIONS = {
-  repeatable: false
+  repeatable: true
 }
 OptionParser.new do |opt|
-  opt.on('-r', '--repeatable') {|v| OPTIONS[:repeatable] = v}
+  opt.on('--[no-]repeatable') {|v| OPTIONS[:repeatable] = v}
   opt.parse!
 end
 
