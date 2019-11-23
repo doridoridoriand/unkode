@@ -4,7 +4,7 @@ metadata:
   name: waste-cpu-resource-deployment
   namespace: doridoridoriand
 spec:
-  replicas: 48
+  replicas: 80
   selector:
     matchLabels:
       app: waste-cpu-resource-app
