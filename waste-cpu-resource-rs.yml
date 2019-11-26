@@ -4,7 +4,7 @@ metadata:
   name: waste-cpu-resource-deployment
   namespace: doridoridoriand
 spec:
-  replicas: 80
+  replicas: 10
   selector:
     matchLabels:
       app: waste-cpu-resource-app
@@ -16,8 +16,11 @@ spec:
     spec:
       containers:
         - name: waste-cpu-resource-container
-          image: doridoridoriand/waste_cpu_resource:0.0.1
+          image: doridoridoriand/waste_cpu_resource:huge-primenumber
           resources:
             requests:
-              cpu: 1000m
-              memory: 1000Mi
+              cpu: 500m
+              memory: 20000Mi
+            limits:
+              cpu: 500m
+              memory: 20000Mi
