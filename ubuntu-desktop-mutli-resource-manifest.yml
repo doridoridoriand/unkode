@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: desktop
+  name: ubuntu-desktop
+  namespace: doridoridoriand
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: desktop
+  template:
+    metadata:
+      labels:
+        run: desktop
+      namespace: doridoridoriand
+    spec:
+      containers:
+      - image: dorowu/ubuntu-desktop-lxde-vnc
+        name: ubuntu-desktop
+        ports:
+          - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ubuntu-desktop-alb-service
+  namespace: doridoridoriand
+spec:
+  type: NodePort
+  ports:
+    - name: "http-port"
+      protocol: "TCP"
+      port: 18000
+      targetPort: 80
+  selector:
+    app: ubuntu-desktop
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ubuntu-desktop-ingress
+  namespace: doridoridoriand
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/security-groups: sg-xxxx
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=2
+    alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/subnets: subnet-xxx,subnet-xxx,subnet-xxx
+    alb.ingress.kubernetes.io/tags: env=load,app=ubuntu-desktop
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '2'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '5'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ubuntu-desktop-alb-service
+              servicePort: 18000
