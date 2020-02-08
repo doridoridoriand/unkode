@@ -28,11 +28,11 @@ require 'pry'
 OPTIONS = {}
 TABLE_NAME = 'geoip_data'
 OptionParser.new do |opt|
-  opt.on('-y yaml-file-path', 'Absolute file path of configuration file',     String)  {|v| OPTIONS[:yaml_file_path]       = v}
-  opt.on('-d mmdb_file_path', 'Absolute edirectory path of MaxMind DB file.', String)  {|v| OPTIONS[:mmdb_file_path]       = v}
-  opt.on('-p number-of_process', 'Number of Processors.',                     Integer) {|v| OPTIONS[:number_of_processors] = v}
-  opt.on('-c', 'Create DB Table')                                                      {|v| OPTIONS[:create_db_table]      = v}
-  opt.on('-e', 'Execute insert from MaxMindDB to MySQL')                               {|v| OPTIONS[:execute]              = v}
+  opt.on('-y', '--yaml-file-path VALUE',    String,  'Absolute file path of configuration file')     {|v| OPTIONS[:yaml_file_path]       = v}
+  opt.on('-d', '--mmdb_file_path VALUE',    String,  'Absolute edirectory path of MaxMind DB file.') {|v| OPTIONS[:mmdb_file_path]       = v}
+  opt.on('-p', '--number-of_process VALUE', Integer, 'Number of Processors.')                        {|v| OPTIONS[:number_of_processors] = v}
+  opt.on('-c', '--create-db-table',                  'Create DB Table')                              {|v| OPTIONS[:create_db_table]      = v}
+  opt.on('-e', '--execute',                          'Execute insert from MaxMindDB to MySQL')       {|v| OPTIONS[:execute]              = v}
   opt.parse!
 end
 

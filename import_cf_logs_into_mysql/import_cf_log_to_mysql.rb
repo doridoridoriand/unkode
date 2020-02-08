@@ -8,10 +8,10 @@ require 'pry'
 OPTIONS = {}
 TABLE_NAME = 'cflog'
 OptionParser.new do |opt|
-  opt.on('-y yaml-file-path', 'Absolute directory path of configure file', String) {|v| OPTIONS[:yaml_file_path]   = v}
-  opt.on('-d directory-path', 'Absolute directory path of log files',      String) {|v| OPTIONS[:directory_path]   = v}
-  opt.on('-c',  '--create-db-schema')                                              {|v| OPTIONS[:create_db_schema] = v}
-  opt.on('-i',  '--insert')                                                        {|v| OPTIONS[:insert]           = v}
+  opt.on('-y', '--yaml-file-path VALUE', String, 'Absolute directory path of configure file') {|v| OPTIONS[:yaml_file_path]   = v}
+  opt.on('-d', '--directory-path VALUE', String, 'Absolute directory path of log files')      {|v| OPTIONS[:directory_path]   = v}
+  opt.on('-c', '--create-db-schema')                                                          {|v| OPTIONS[:create_db_schema] = v}
+  opt.on('-i', '--insert')                                                                    {|v| OPTIONS[:insert]           = v}
   opt.parse!
 end
 
