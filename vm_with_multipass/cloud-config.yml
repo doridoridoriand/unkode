@@ -9,8 +9,14 @@ resolv_conf:
 package_update: true
 package_upgrade: true
 packages:
+  - build-essential
+  - docker.io
   - htop
   - dstat
   - zsh
   - tig
   - openssl
+  - wget
+  - lsof
+  - tree
+  - git
