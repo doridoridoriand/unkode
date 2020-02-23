@@ -15,4 +15,5 @@ numOfMem=`echo $(($totalMachineMemory/2))`;
 # ディスク決め打ちで100GB
 numOfDisk=100;
 
-multipass launch --cpus $numOfCPU --disk "${numOfDisk}GB" --mem "${numOfMem}GB" --name $vmName;
+# e.g. https://cloudinit.readthedocs.io/en/latest/topics/modules.html
+multipass launch --cpus $numOfCPU --disk "${numOfDisk}GB" --mem "${numOfMem}GB" --name $vmName --cloud-init cloud-config.yml;

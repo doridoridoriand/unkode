@@ -1,0 +1,16 @@
+# cloud-config
+
+# resolv.conf
+manage_resolv_conf: true
+resolv_conf:
+  nameservers: ['1.1.1.1']
+
+# package
+package_update: true
+package_upgrade: true
+packages:
+  - htop
+  - dstat
+  - zsh
+  - tig
+  - openssl
