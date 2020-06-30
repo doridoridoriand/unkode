@@ -31,7 +31,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: redash
   redis:
-    image: redis:4.0
+    image: redis:5.0.9
     container_name: redis
     ports:
       - 6379:6379
@@ -53,12 +53,15 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
       ME_CONFIG_MONGODB_SERVER: mongodb
   postgres:
-    image: postgres:9.6.9
+    image: postgres:9.6.18
     container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
     volumes:
       - ./postgres:/var/lib/postgresql/data
   redash-server:
-    image: redash/redash:4.0.0.b3948
+    image: redash/redash:8.0.2.b37747
     container_name: redash-server
     command: server
     ports:
@@ -73,7 +76,7 @@ services:
       - postgres
       - redis
   redash-worker:
-    image: redash/redash:4.0.0.b3948
+    image: redash/redash:8.0.2.b37747
     container_name: redash-worker
     command: scheduler
     environment:
