@@ -71,7 +71,7 @@ services:
       REDASH_LOG_LEVEL: "INFO"
       REDASH_REDIS_URL: "redis://redis:6379/0"
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
-      REDASH_COOKIE_SECRET: veryverysecret
+      REDASH_COOKIE_SECRET: "3mB1ok^Ix-fRjb7wC7"
     depends_on:
       - postgres
       - redis
@@ -84,6 +84,7 @@ services:
       REDASH_LOG_LEVEL: "INFO"
       REDASH_REDIS_URL: "redis://redis:6379/0"
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      REDASH_COOKIE_SECRET: "3mB1ok^Ix-fRjb7wC7"
       QUEUES: "queries,scheduled_queries,celery"
       WORKERS_COUNT: 2
     depends_on:
