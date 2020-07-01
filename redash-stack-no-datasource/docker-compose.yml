@@ -1,0 +1,47 @@
+version: '3'
+services:
+  redis:
+    image: redis:5.0.9
+    container_name: redis
+    ports:
+      - 6379:6379
+  postgres:
+    image: postgres:9.6.18
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+  redash-server:
+    image: redash/redash:8.0.2.b37747
+    container_name: redash-server
+    command: server
+    ports:
+      - 5000:5000
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      REDASH_COOKIE_SECRET: "Sew0sQ0k-1jTe9tGx"
+    depends_on:
+      - postgres
+      - redis
+  redash-worker:
+    image: redash/redash:8.0.2.b37747
+    container_name: redash-worker
+    command: scheduler
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      REDASH_COOKIE_SECRET: "Sew0sQ0k-1jTe9tGx"
+      QUEUES: "queries,scheduled_queries,celery"
+      WORKERS_COUNT: 2
+    depends_on:
+      - postgres
+      - redis
+      - redash-server
+
