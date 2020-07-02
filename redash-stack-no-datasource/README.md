@@ -1,18 +1,15 @@
 
 # Redash Stack
-BI tools and DB stacks for analyze easily.
+Redash server and workers
 
 # Dependencies
 - Docker minimum 18.03
 - docker-compose minimum 1.21.0
 
 # Software Included
-- Clickhouse server 1.1
-- Clickhouse client 18.12
-- MySQL 5.7.12
-- MongoDB 4.0
-- Postgres 9.6.9
-- Redash 4.0.0
+- Redash 8.0.2
+- Postgres 9.6.18
+
 
 # Usage
 ```
