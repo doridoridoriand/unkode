@@ -6,7 +6,7 @@ services:
     ports:
       - 6379:6379
   postgres:
-    image: postgres:9.6.18
+    image: postgres:10.13
     container_name: postgres
     environment:
       POSTGRES_PASSWORD: "password"
