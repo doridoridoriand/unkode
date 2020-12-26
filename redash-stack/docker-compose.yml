@@ -21,7 +21,7 @@ services:
     depends_on:
       - clickhouse-server
   mysql:
-    image: mysql:5.7.22
+    image: mysql:5.7.32
     container_name: mysql
     volumes:
       - ./mysql:/var/lib/mysql
@@ -31,7 +31,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: redash
   redis:
-    image: redis:5.0.9
+    image: redis:6.0.9
     container_name: redis
     ports:
       - 6379:6379
@@ -53,7 +53,7 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
       ME_CONFIG_MONGODB_SERVER: mongodb
   postgres:
-    image: postgres:9.6.18
+    image: postgres:11.10
     container_name: postgres
     environment:
       POSTGRES_PASSWORD: "password"
