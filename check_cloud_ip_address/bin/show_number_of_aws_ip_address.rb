@@ -8,7 +8,7 @@ require 'pry'
 logger = Logger.new STDOUT
 logger.info('Start to parse IP Address ranges of AWS.')
 
-file = open('https://ip-ranges.amazonaws.com/ip-ranges.json').read
+file = URI.open('https://ip-ranges.amazonaws.com/ip-ranges.json').read
 res  = JSON.parse(file)['prefixes']
 cidrs = res.map {|r| r['ip_prefix']}
 
