@@ -21,6 +21,7 @@ services:
       - 5000:5000
     environment:
       PYTHONUNBUFFERED: 0
+      REDASH_ADDITIONAL_QUERY_RUNNERS: "redash.query_runner.python"
       REDASH_LOG_LEVEL: "INFO"
       REDASH_REDIS_URL: "redis://redis:6379/0"
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
@@ -34,6 +35,7 @@ services:
     command: scheduler
     environment:
       PYTHONUNBUFFERED: 0
+      REDASH_ADDITIONAL_QUERY_RUNNERS: "redash.query_runner.python"
       REDASH_LOG_LEVEL: "INFO"
       REDASH_REDIS_URL: "redis://redis:6379/0"
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
