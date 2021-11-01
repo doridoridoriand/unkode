@@ -14,7 +14,7 @@ services:
     volumes:
       - ./postgres:/var/lib/postgresql/data
   redash-server:
-    image: redash/redash:8.0.2.b37747
+    image: redash/redash:10.0.0.b50363
     container_name: redash-server
     command: server
     ports:
@@ -30,7 +30,7 @@ services:
       - postgres
       - redis
   redash-worker:
-    image: redash/redash:8.0.2.b37747
+    image: redash/redash:10.0.0.b50363
     container_name: redash-worker
     command: scheduler
     environment:
@@ -40,7 +40,41 @@ services:
       REDASH_REDIS_URL: "redis://redis:6379/0"
       REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
       REDASH_COOKIE_SECRET: "Sew0sQ0k-1jTe9tGx"
-      QUEUES: "queries,scheduled_queries,celery"
+      QUEUES: "queries"
+      WORKERS_COUNT: 2
+    depends_on:
+      - postgres
+      - redis
+      - redash-server
+  redash-worker-scheduled-queries:
+    image: redash/redash:10.0.0.b50363
+    container_name: redash-worker-scheduled-queries
+    command: scheduler
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_ADDITIONAL_QUERY_RUNNERS: "redash.query_runner.python"
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      REDASH_COOKIE_SECRET: "Sew0sQ0k-1jTe9tGx"
+      QUEUES: "scheduled_queries"
+      WORKERS_COUNT: 2
+    depends_on:
+      - postgres
+      - redis
+      - redash-server
+  redash-worker-celery:
+    image: redash/redash:10.0.0.b50363
+    container_name: redash-worker-celery
+    command: scheduler
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_ADDITIONAL_QUERY_RUNNERS: "redash.query_runner.python"
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      REDASH_COOKIE_SECRET: "Sew0sQ0k-1jTe9tGx"
+      QUEUES: "celery"
       WORKERS_COUNT: 2
     depends_on:
       - postgres
