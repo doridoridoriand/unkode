@@ -1,0 +1,50 @@
+# https://discuss.redash.io/t/redash-9-beta-theres-already-an-active-rq-scheduler/6598
+# ひとまずworkerコンテナそこまで分けなくても問題無いので1コンテナに集約する版を追加。どっかで複数コンテナの方対応したい
+version: '3'
+services:
+  redis:
+    image: redis:6.0.9
+    container_name: redis
+    ports:
+      - 6379:6379
+  postgres:
+    image: postgres:11.10
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+  redash-server:
+    image: redash/redash:10.1.0.b50633
+    container_name: redash-server
+    command: server
+    ports:
+      - 5000:5000
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_ADDITIONAL_QUERY_RUNNERS: "redash.query_runner.python"
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      REDASH_COOKIE_SECRET: "Sew0sQ0k-1jTe9tGx"
+    depends_on:
+      - postgres
+      - redis
+  redash-worker:
+    image: redash/redash:10.1.0.b50633
+    container_name: redash-worker
+    command: scheduler
+    environment:
+      PYTHONUNBUFFERED: 0
+      REDASH_ADDITIONAL_QUERY_RUNNERS: "redash.query_runner.python"
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://postgres@postgres/postgres"
+      REDASH_COOKIE_SECRET: "Sew0sQ0k-1jTe9tGx"
+      QUEUES: "queries,scheduled_queries,celery"
+      WORKERS_COUNT: 2
+    depends_on:
+      - postgres
+      - redis
+      - redash-server
