@@ -8,6 +8,7 @@ require 'pry'
 logger = Logger.new STDOUT
 logger.info('Start to parse IP Address ranges of M247.')
 
+# ASN: AS9009
 CIDRS = [
   "89.238.128.0/18",
   "93.110.32.0/20",
