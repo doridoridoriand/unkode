@@ -1,5 +1,6 @@
 require 'parallel'
 require 'ipaddress'
+<<<<<<< HEAD
 require 'open-uri'
 require 'json'
 require 'logger'
@@ -10,6 +11,7 @@ logger.info('Start to parse IP Address ranges of M247.')
 
 # ASN: AS9009
 CIDRS = [
+cidrs = [
   "89.238.128.0/18",
   "93.110.32.0/20",
   "217.64.112.0/20",
@@ -39,3 +41,7 @@ ips = Parallel.map(CIDRS.map {|r| IPAddress r}) do |cidr|
 end.flatten
 
 logger.info("Completed to calculate number of IP addresses. Number of IP address of M247: #{ips.flatten.count}")
+ips = Parallel.map(cidrs.map {|r| IPAddress r}) do |cidr|
+  cidr.map {|ip| ip.octets.join('.')}
+end.flatten
+puts ips
