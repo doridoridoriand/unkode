@@ -52,13 +52,13 @@ func main() {
 	log.Println("Number of IPv4 CIDR blocks:", len(ipv4Cidrs))
 
 	var numOfIps []int
-	for i := range ipv4Cidrs {
-		numOfIps = append(numOfIps, cidrToIPs(ipv4Cidrs[i]))
+	for _, cidr := range ipv4Cidrs {
+		numOfIps = append(numOfIps, cidrToIPs(cidr))
 	}
 
 	totalNumOfIPs := 0
-	for i := range numOfIps {
-		totalNumOfIPs += numOfIps[i]
+	for _, cidrIPs := range numOfIps {
+		totalNumOfIPs += cidrIPs
 	}
 	log.Println("Completed to calculate number of IPv4 addresses. Number of IPv4 address of AWS:", totalNumOfIPs)
 
