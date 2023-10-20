@@ -27,6 +27,18 @@ get_resources() {
 
     echo "------------------ Ingress ------------------"
     kubectl get ingress --all-namespaces
+
+    echo "------------------ ConfigMaps ------------------"
+    kubectl get configmaps --all-namespaces
+
+    echo "------------------ Secrets ------------------"
+    kubectl get secrets --all-namespaces
+
+    echo "------------------ PersistentVolumes ------------------"
+    kubectl get persistentvolumes --all-namespaces
+
+    echo "------------------ PersistentVolumeClaims ------------------"
+    kubectl get persistentvolumeclaims --all-namespaces
 }
 
 # ループ間隔を指定します（秒単位）。
