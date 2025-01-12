@@ -1,15 +1,22 @@
 require 'optparse'
 require 'net/http'
-require 'pry'
 
 OPTIONS = {}
 OptionParser.new do |opt|
-  opt.on('-u url', '--url', String) {|v| OPTIONS[:url] = v}
+  opt.on('-u URL', '--url=URL', String, 'URL to check status') { |v| OPTIONS[:url] = v }
   opt.parse(ARGV)
 end
 
 raise OptionParser::MissingArgument, 'NoURLFoundError' unless OPTIONS[:url]
 
-res = URI.parse(OPTIONS[:url])
-_  = res
-binding.pry
+begin
+  uri = URI.parse(OPTIONS[:url])
+  response = Net::HTTP.get_response(uri)
+  puts "Status for #{uri}: #{response.code} #{response.message}"
+rescue URI::InvalidURIError
+  abort "Error: Invalid URL format"
+rescue SocketError
+  abort "Error: Could not connect to the server"
+rescue => e
+  abort "Error: #{e.message}"
+end
