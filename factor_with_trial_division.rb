@@ -1,5 +1,12 @@
 
-n = ARGV.first.to_i
+abort "Usage: ruby factor_with_trial_division.rb <positive_integer>" if ARGV.empty?
+
+begin
+  n = Integer(ARGV.first)
+  abort "Input must be a positive integer" if n <= 0
+rescue ArgumentError
+  abort "Error: Invalid integer input"
+end
 
 a = []
 while n.div(2) == 0
