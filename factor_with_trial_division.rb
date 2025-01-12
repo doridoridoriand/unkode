@@ -25,7 +25,7 @@ while f * f <= n
 end
 
 if n != 1
-  a << [n]
+  a << n
 end
 
 p a
