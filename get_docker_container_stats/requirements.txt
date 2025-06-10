@@ -3,7 +3,7 @@ chardet==3.0.4
 docker==4.2.2
 idna==3.7
 pprint==0.1
-requests==2.32.2
+requests==2.32.4
 six==1.15.0
 urllib3==1.26.19
 websocket-client==0.57.0
