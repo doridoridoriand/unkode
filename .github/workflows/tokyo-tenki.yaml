@@ -1,0 +1,21 @@
+name: "Tokyo Tenki"
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [master]
+  schedule:
+    - cron: '0 10 * * 1'
+  workflow_dispatch:
+
+jobs:
+  analyse:
+    name: Analyse
+    runs-on: [linux, ubuntu-latest]
+    steps:
+      - name: Execute shell script
+        run: |
+          # ここにシェルスクリプトの内容を記述します
+          echo "Hello from shell script"
