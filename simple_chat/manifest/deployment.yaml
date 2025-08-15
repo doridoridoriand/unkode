@@ -1,0 +1,90 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-chat-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simple-chat-server
+  template:
+    metadata:
+      labels:
+        app: simple-chat-server
+    spec:
+      containers:
+        - name: simple-chat-server
+          image: doridoridoriand/simple_chat-server:node12.3-v0.0.1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 1000m
+              memory: 1000Mi
+          ports:
+            - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-chat-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simple-chat-client
+  template:
+    metadata:
+      labels:
+        app: simple-chat-client
+    spec:
+      containers:
+        - name: simple-chat-client
+          image: doridoridoriand/simple_chat-client:nginx1.17.4-v0.0.1
+          env:
+            - name: SERVER_HOST
+              value: "simple-chat-server"
+            - name: SERVER_PORT
+              value: "3000"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 1000m
+              memory: 1000Mi
+          ports:
+            - containerPort: 80
+      lifecycle:
+        preStart:
+          exec:
+            command: ["/bin/bash", "-c", "echo $SERVER_HOST > /usr/share/nginx/html/host.txt && echo $SERVER_PORT > /usr/share/nginx/html/port.txt"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debug-container
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug-container
+  template:
+    metadata:
+      labels:
+        app: debug-container
+    spec:
+      containers:
+        - name: debug-container
+          image: doridoridoriand/lifeboat-ubuntu:rolling-latest
+          command: ["/bin/bash"]
+          args: ["-c", "sleep infinity"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 1000m
+              memory: 1000Mi
