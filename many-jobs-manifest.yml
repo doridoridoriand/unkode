@@ -61,74 +61,74 @@ spec:
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
           limits:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber6
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber7
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber8
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber9
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber10
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber11
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber12
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber13
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber14
         image: doridoridoriand/boring_primenumber:output-oneline
         resources:
           requests:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 100m
+            memory: 100Mi
         command: ["ruby",  "exec.rb", "480000"]
       restartPolicy: Never
   backoffLimit: 4
