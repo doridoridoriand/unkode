@@ -2,10 +2,15 @@ version: '3'
 
 services:
   frontend:
-    image: doridoridoriand/simple_chat-client:0.0.1
+    image: doridoridoriand/simple_chat-client:nginx1.17.4
     ports:
-      - "10080:80"
+      - "${FRONTEND_PORT:-10080}:80"
+    environment:
+      - SERVER_URL=http://server:${SERVER_PORT:-3000}
+  
   server:
-    image: doridoridoriand/simple_chat-server:0.0.1
+    image: doridoridoriand/simple_chat-server:node12.3
     ports:
-      - "13000:3000"
+      - "${SERVER_PORT:-13000}:3000"
+    environment:
+      - PORT=${SERVER_PORT:-3000}

@@ -1,7 +1,7 @@
 let app = require('express')();
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
-let port = 3000;
+let port = process.env.PORT || 3000;  // 環境変数からポートを読み取り、デフォルトは3000
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
