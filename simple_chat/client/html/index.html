@@ -22,6 +22,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
+      window.SERVER_HOST = './host.txt';
+      window.SERVER_PORT = './port.txt';
+    </script>
+    <script>
       $(function () {
         var socket = io('http://' + (window.SERVER_HOST || '127.0.0.1') + ':' + (window.SERVER_PORT || '13000'));
         $('form').submit(function(){
