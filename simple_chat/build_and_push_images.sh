@@ -4,6 +4,7 @@ set -eu
 
 DOCKER_PS_RESULT=$(docker ps 2>/dev/null);
 BUILDX_NAME=simple-chat-builder
+VERSION=v0.0.3
 
 if [[ $DOCKER_PS_RESULT == *running?* ]]; then
   echo "ERROR: docker engine not running. Build failed.";
@@ -23,6 +24,6 @@ docker buildx create --name ${BUILDX_NAME}
 docker buildx use ${BUILDX_NAME}
 
 cd ${PROJECT_ROOT}/simple_chat/server
-docker buildx build --push --platform=linux/arm64,linux/amd64,linux/s390x,linux/ppc64le --tag doridoridoriand/simple_chat-server:latest --tag doridoridoriand/simple_chat-server:node12.3-v0.0.2 -f Dockerfile .
+docker buildx build --push --platform=linux/arm64,linux/amd64,linux/s390x,linux/ppc64le --tag doridoridoriand/simple_chat-server:latest --tag doridoridoriand/simple_chat-server:node12.3-${VERSION} -f Dockerfile .
 cd ${PROJECT_ROOT}/simple_chat/client
-docker buildx build --push --platform=linux/arm64,linux/amd64,linux/s390x,linux/ppc64le --tag doridoridoriand/simple_chat-client:latest --tag doridoridoriand/simple_chat-client:nginx1.17.4-v0.0.2 -f Dockerfile .
+docker buildx build --push --platform=linux/arm64,linux/amd64,linux/s390x,linux/ppc64le --tag doridoridoriand/simple_chat-client:latest --tag doridoridoriand/simple_chat-client:nginx1.17.4-${VERSION} -f Dockerfile .
