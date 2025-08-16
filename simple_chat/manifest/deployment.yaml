@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: simple-chat-server
-          image: doridoridoriand/simple_chat-server:node12.3-v0.0.1
+          image: doridoridoriand/simple_chat-server:node12.3-v0.0.2
           resources:
             requests:
               cpu: 100m
@@ -42,7 +42,7 @@ spec:
     spec:
       containers:
         - name: simple-chat-client
-          image: doridoridoriand/simple_chat-client:nginx1.17.4-v0.0.1
+          image: doridoridoriand/simple_chat-client:nginx1.17.4-v0.0.2
           env:
             - name: SERVER_HOST
               value: "simple-chat-server"
@@ -57,10 +57,10 @@ spec:
               memory: 1000Mi
           ports:
             - containerPort: 80
-      lifecycle:
-        preStart:
-          exec:
-            command: ["/bin/bash", "-c", "echo $SERVER_HOST > /usr/share/nginx/html/host.txt && echo $SERVER_PORT > /usr/share/nginx/html/port.txt"]
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "-c", "echo $SERVER_HOST > /usr/share/nginx/html/host.txt && echo $SERVER_PORT > /usr/share/nginx/html/port.txt"]
 ---
 apiVersion: apps/v1
 kind: Deployment

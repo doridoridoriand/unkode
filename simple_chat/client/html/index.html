@@ -22,8 +22,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
-      window.SERVER_HOST = './host.txt';
-      window.SERVER_PORT = './port.txt';
+      window.SERVER_HOST = open('./host.txt', '_self').read();
+      window.SERVER_PORT = open('./port.txt', '_self').read();
     </script>
     <script>
       $(function () {
