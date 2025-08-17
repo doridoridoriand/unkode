@@ -22,17 +22,52 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
-      $(function () {
+      // Values will be populated asynchronously below
+      window.SERVER_HOST = null;
+      window.SERVER_PORT = null;
+
+      async function loadServerConfig() {
+        try {
+          const response = await fetch('/config/config.json');
+          if (response.ok) {
+            const config = await response.json();
+            window.SERVER_HOST = config.server.host;
+            window.SERVER_PORT = config.server.port;
+
+            console.log('window.SERVER_HOST:', window.SERVER_HOST);
+            console.log('window.SERVER_PORT:', window.SERVER_PORT);
+            console.log('設定を読み込みました:', config);
+            initializeSocket();
+          } else {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+        } catch (error) {
+          console.error('設定の読み込みに失敗しました:', error);
+          initializeSocket();
+        }
+      }
+
+      // ソケット接続の初期化
+      function initializeSocket() {
         var socket = io('http://' + (window.SERVER_HOST || '127.0.0.1') + ':' + (window.SERVER_PORT || '13000'));
+
+        socket.on('chat message', function(msg){
+          $('#messages').append($('<li>').text(msg));
+        });
+
         $('form').submit(function(){
           socket.emit('chat message', $('#m').val());
           $('#m').val('');
           return false;
         });
-        socket.on('chat message', function(msg){
-          $('#messages').append($('<li>').text(msg));
-          window.scrollTo(0, document.body.scrollHeight);
-        });
+      }
+
+      // ページ読み込み時に設定を読み込む
+      document.addEventListener('DOMContentLoaded', loadServerConfig);
+    </script>
+    <script>
+      $(function () {
+        // 既存のソケット処理は loadServerConfig と initializeSocket に移動済み
       });
     </script>
   </body>
