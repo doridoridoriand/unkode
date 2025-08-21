@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: waste-cpu-resource-container
-          image: doridoridoriand/waste_cpu_resource:huge-primenumber
+          image: doridoridoriand/boring_primenumber:2.7.8-0.0.2
           resources:
             requests:
               cpu: 500m
