@@ -7,12 +7,12 @@ spec:
   replicas: 10
   selector:
     matchLabels:
-      app: waste-cpu-resource-app
+      app: waste-cpu-resource-app-rs
   template:
     metadata:
       namespace: doridoridoriand
       labels:
-        app: waste-cpu-resource-app
+        app: waste-cpu-resource-app-rs
     spec:
       containers:
         - name: waste-cpu-resource-container
