@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: waste-cpu-resource-deployment
+  name: waste-cpu-resource-replicaset
   namespace: doridoridoriand
 spec:
   replicas: 10

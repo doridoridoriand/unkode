@@ -16,11 +16,11 @@ spec:
     spec:
       containers:
         - name: waste-cpu-resource-container
-          image: doridoridoriand/boring_primenumber:2.7.8-0.0.2
+          image: doridoridoriand/boring_primenumber:3.0.0-0.0.2
           resources:
             requests:
               cpu: 500m
               memory: 500Mi
             limits:
-              cpu: 500m
-              memory: 20000Mi
+              cpu: 1500m
+              memory: 1Gi
