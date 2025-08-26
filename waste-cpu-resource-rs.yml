@@ -1,22 +1,30 @@
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: waste-cpu-resource-deployment
+  name: waste-cpu-resource-replicaset
   namespace: doridoridoriand
 spec:
   replicas: 10
   selector:
     matchLabels:
-      app: waste-cpu-resource-app
+      app: waste-cpu-resource-app-rs
   template:
     metadata:
       namespace: doridoridoriand
       labels:
-        app: waste-cpu-resource-app
+        app: waste-cpu-resource-app-rs
     spec:
       containers:
         - name: waste-cpu-resource-container
           image: doridoridoriand/boring_primenumber:2.7.8-0.0.2
+          securityContext:
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
           resources:
             requests:
               cpu: 500m
