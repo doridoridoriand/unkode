@@ -17,4 +17,4 @@ jobs:
     steps:
       - name: Execute shell script
         run: |
-          curl -s -H "Accept-Language: ${LANG%_*}" wttr.in/"${1:-Tokyo}"
+          curl -s -H "Accept-Language: ${LANG%_*:-en}" https://wttr.in/Tokyo || echo "Failed to fetch weather data"
