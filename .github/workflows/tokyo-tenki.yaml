@@ -17,5 +17,4 @@ jobs:
     steps:
       - name: Execute shell script
         run: |
-          # ここにシェルスクリプトの内容を記述します
-          echo "Hello from shell script"
+          curl -s -H "Accept-Language: ${LANG%_*}" wttr.in/"${1:-Tokyo}"
