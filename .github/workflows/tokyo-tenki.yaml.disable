@@ -13,9 +13,8 @@ on:
 jobs:
   analyse:
     name: Analyse
-    runs-on: [linux, ubuntu-latest]
+    runs-on: arc-runner-set
     steps:
       - name: Execute shell script
         run: |
-          # ここにシェルスクリプトの内容を記述します
-          echo "Hello from shell script"
+          curl -s -H "Accept-Language: ${LANG%_*:-en}" https://wttr.in/Tokyo || echo "Failed to fetch weather data"
