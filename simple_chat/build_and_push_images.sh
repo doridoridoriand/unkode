@@ -4,7 +4,7 @@ set -eu
 
 DOCKER_PS_RESULT=$(docker ps 2>/dev/null);
 BUILDX_NAME=simple-chat-builder
-VERSION=v0.0.6
+VERSION=v0.0.7
 
 if [[ $DOCKER_PS_RESULT == *running?* ]]; then
   echo "ERROR: docker engine not running. Build failed.";
