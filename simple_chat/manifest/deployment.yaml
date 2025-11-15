@@ -15,14 +15,14 @@ spec:
     spec:
       containers:
         - name: simple-chat-server
-          image: doridoridoriand/simple_chat-server:node12.3-v0.0.3
+          image: doridoridoriand/simple_chat-server:node12.3-v0.0.7
           resources:
             requests:
               cpu: 100m
               memory: 100Mi
             limits:
-              cpu: 1000m
-              memory: 1000Mi
+              cpu: 200m
+              memory: 200Mi
           ports:
             - containerPort: 3000
 ---
@@ -42,7 +42,7 @@ spec:
     spec:
       containers:
         - name: simple-chat-client
-          image: doridoridoriand/simple_chat-client:nginx1.17.4-v0.0.3
+          image: doridoridoriand/simple_chat-client:nginx1.17.4-v0.0.7
           env:
             - name: SERVER_HOST
               value: "simple-chat-server"
@@ -53,14 +53,14 @@ spec:
               cpu: 100m
               memory: 100Mi
             limits:
-              cpu: 1000m
-              memory: 1000Mi
+              cpu: 200m
+              memory: 200Mi
           ports:
             - containerPort: 80
           lifecycle:
             postStart:
               exec:
-                command: ["/bin/bash", "-c", "echo { \"server\": { \"host\": \"$SERVER_HOST\", \"port\": \"$SERVER_PORT\" } } > /usr/share/nginx/html/config/config.json"]
+                command: ["/bin/sh", "-c", "mkdir -p /usr/share/nginx/html/config && echo '{\"server\":{\"host\":\"'$SERVER_HOST'\",\"port\":\"'$SERVER_PORT'\"}}' > /usr/share/nginx/html/config/config.json"]
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -86,5 +86,5 @@ spec:
               cpu: 100m
               memory: 100Mi
             limits:
-              cpu: 1000m
-              memory: 1000Mi
+              cpu: 200m
+              memory: 200Mi
