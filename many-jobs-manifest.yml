@@ -9,6 +9,14 @@ spec:
       containers:
       - name: boring-primenumber0
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 1000m
@@ -19,6 +27,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber1
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 1000m
@@ -29,6 +45,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber2
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 1000m
@@ -39,6 +63,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber3
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 1000m
@@ -49,6 +81,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber4
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 1000m
@@ -59,6 +99,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber5
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m
@@ -69,6 +117,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber6
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m
@@ -76,6 +132,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber7
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m
@@ -83,6 +147,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber8
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m
@@ -90,6 +162,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber9
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m
@@ -97,6 +177,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber10
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m
@@ -104,6 +192,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber11
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m
@@ -111,6 +207,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber12
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m
@@ -118,6 +222,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber13
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m
@@ -125,6 +237,14 @@ spec:
         command: ["ruby",  "exec.rb", "480000"]
       - name: boring-primenumber14
         image: doridoridoriand/boring_primenumber:output-oneline
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
         resources:
           requests:
             cpu: 100m

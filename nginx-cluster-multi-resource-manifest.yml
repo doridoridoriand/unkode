@@ -18,6 +18,14 @@ spec:
       containers:
         - name: nginx-cluster-container
           image: nginx:1.17.5
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
           resources:
             requests:
               cpu: 1000m
