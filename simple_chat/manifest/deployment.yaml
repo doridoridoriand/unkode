@@ -16,6 +16,14 @@ spec:
       containers:
         - name: simple-chat-server
           image: doridoridoriand/simple_chat-server:node12.3-v0.0.7
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
           resources:
             requests:
               cpu: 100m
@@ -43,6 +51,14 @@ spec:
       containers:
         - name: simple-chat-client
           image: doridoridoriand/simple_chat-client:nginx1.17.4-v0.0.7
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
           env:
             - name: SERVER_HOST
               value: "simple-chat-server"
@@ -79,6 +95,14 @@ spec:
       containers:
         - name: debug-container
           image: doridoridoriand/lifeboat-ubuntu:rolling-latest
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
           command: ["/bin/bash"]
           args: ["-c", "sleep infinity"]
           resources:
