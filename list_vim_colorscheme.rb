@@ -1,15 +1,33 @@
+#!/usr/bin/env ruby
+# Fetches and lists vim colorschemes from vim.org
+# Dependencies: gem install mechanize
+# Usage: ruby list_vim_colorscheme.rb
+
 require 'mechanize'
-require 'pry'
 
 agent                  = Mechanize.new
-agent.log              = Logger.new STDOUT
 agent.user_agent_alias = 'Mac Safari'
 
 page = agent.get('https://www.vim.org/scripts/script_search_results.php?&script_type=color%20scheme&order_by=rating&show_me=1000')
 html = page.content
 doc = Nokogiri::HTML.parse(html)
 
-item_detail_page = doc.xpath("//td[@class='rowodd']/a").map {|r| r.attributes['href'].value}.uniq
-absolute_item_detail_page_links = item_detail_page.map {|l| "https://www.vim.org/scripts/#{l}"}
+# Get links from both rowodd and roweven classes
+rowodd_links = doc.xpath("//td[@class='rowodd']/a")
+roweven_links = doc.xpath("//td[@class='roweven']/a")
+all_links = (rowodd_links + roweven_links).uniq { |link| link.attributes['href'].value }
 
-binding.pry
+# Extract colorscheme information
+colorschemes = all_links.map do |link|
+  {
+    name: link.text.strip,
+    url: "https://www.vim.org/scripts/#{link.attributes['href'].value}"
+  }
+end
+
+# Output the results
+puts "Found #{colorschemes.size} vim colorschemes:\n\n"
+colorschemes.each_with_index do |scheme, index|
+  puts "#{index + 1}. #{scheme[:name]}"
+  puts "   #{scheme[:url]}\n\n"
+end
