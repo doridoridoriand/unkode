@@ -40,8 +40,8 @@ File.open(absolute_file_path, 'w') do |f|
     
     # Generate hex data efficiently
     # SecureRandom.hex(n) generates n random bytes and returns 2*n hex characters
-    # So for write_size bytes, we need write_size/2 as the parameter
-    hex_data = SecureRandom.hex(write_size / 2)
+    # So for write_size bytes, we need (write_size+1)/2 as the parameter (round up for odd sizes)
+    hex_data = SecureRandom.hex((write_size + 1) / 2)
     
     # Truncate to exact size needed
     hex_data = hex_data[0, write_size] if hex_data.length > write_size

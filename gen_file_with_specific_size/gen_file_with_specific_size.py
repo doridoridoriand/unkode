@@ -23,10 +23,12 @@ def gen_hex_chunk(size_bytes):
     """Generate a large chunk of hex data at once for better performance.
     
     Args:
-        size_bytes: Size in bytes to generate (as hex characters)
+        size_bytes: Number of hex characters to generate (not bytes of data).
+                   Since each byte of data produces 2 hex characters,
+                   we need size_bytes/2 random bytes.
     
     Returns:
-        String of hex characters
+        String of hex characters of length size_bytes
     """
     # Each byte needs 2 hex characters, so we need size_bytes/2 random bytes
     num_random_bytes = (size_bytes + 1) // 2  # Round up for odd sizes
