@@ -4,8 +4,6 @@ require 'json'
 # Scrape CloudFront edge locations from Wikipedia
 url = 'https://en.wikipedia.org/wiki/Amazon_CloudFront'
 
-public
-
 def scrape_edge_locations
   agent                  = Mechanize.new
   agent.log              = Logger.new STDOUT
@@ -59,7 +57,7 @@ def get_known_edge_locations
     { city: 'Bangkok', country: 'Thailand', airport_code: 'BKK', region: 'Asia Pacific' },
     { city: 'Bangalore', country: 'India', airport_code: 'BLR', region: 'Asia Pacific' },
     { city: 'Beijing', country: 'China', airport_code: 'PEK', region: 'Asia Pacific' },
-    { city: 'Berlin', country: 'Germany', airport_code: 'TXL', region: 'Europe' },
+    { city: 'Berlin', country: 'Germany', airport_code: 'BER', region: 'Europe' },
     { city: 'Bogotá', country: 'Colombia', airport_code: 'BOG', region: 'South America' },
     { city: 'Boston', country: 'United States', airport_code: 'BOS', region: 'North America' },
     { city: 'Brussels', country: 'Belgium', airport_code: 'BRU', region: 'Europe' },
@@ -134,7 +132,6 @@ def get_known_edge_locations
     { city: 'Vancouver', country: 'Canada', airport_code: 'YVR', region: 'North America' },
     { city: 'Vienna', country: 'Austria', airport_code: 'VIE', region: 'Europe' },
     { city: 'Warsaw', country: 'Poland', airport_code: 'WAW', region: 'Europe' },
-    { city: 'Washington DC', country: 'United States', airport_code: 'IAD', region: 'North America' },
     { city: 'Zurich', country: 'Switzerland', airport_code: 'ZRH', region: 'Europe' }
   ]
 end
