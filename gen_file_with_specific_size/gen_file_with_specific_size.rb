@@ -26,20 +26,30 @@ absolute_file_path = "#{OPTIONS[:directory_path]}/#{OPTIONS[:filename]}.txt"
 # 既にファイルが指定したディレクトリに存在する場合、例外とする
 raise StandardError, 'FileAlreadyExistsError' if File.file?(absolute_file_path)
 
-loop_counter = 0
-while true
-  begin
-    File.open(absolute_file_path, 'a') do |r|
-      if loop_counter % 1000 === 0
-        if File.size(absolute_file_path) >= OPTIONS[:size] * 1024 * 1024 * 1024
-          raise StandardError, 'FileSizeReachedError'
-        end
-      end
-      r << SecureRandom.hex(128)
-    end
-    loop_counter = loop_counter + 1
-  rescue
-    exit
+target_size_bytes = OPTIONS[:size] * 1024 * 1024 * 1024
+chunk_size = 10 * 1024 * 1024  # Write 10MB chunks at a time for better performance
+
+File.open(absolute_file_path, 'w') do |f|
+  bytes_written = 0
+  
+  while bytes_written < target_size_bytes
+    remaining_bytes = target_size_bytes - bytes_written
+    
+    # Adjust chunk size for the last write to avoid overshooting
+    write_size = [chunk_size, remaining_bytes].min
+    
+    # Generate hex data efficiently
+    # SecureRandom.hex(n) generates n random bytes and returns 2*n hex characters
+    # So for write_size bytes, we need write_size/2 as the parameter
+    hex_data = SecureRandom.hex(write_size / 2)
+    
+    # Truncate to exact size needed
+    hex_data = hex_data[0, write_size] if hex_data.length > write_size
+    
+    f.write(hex_data)
+    bytes_written += hex_data.length
   end
 end
+
+exit
 

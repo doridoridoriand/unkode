@@ -19,6 +19,23 @@ def gen_hex():
     r = "%064x" % rndm
     return r[:128]
 
+def gen_hex_chunk(size_bytes):
+    """Generate a large chunk of hex data at once for better performance.
+    
+    Args:
+        size_bytes: Size in bytes to generate (as hex characters)
+    
+    Returns:
+        String of hex characters
+    """
+    # Each byte needs 2 hex characters, so we need size_bytes/2 random bytes
+    num_random_bytes = (size_bytes + 1) // 2  # Round up for odd sizes
+    # Generate random bytes more efficiently
+    random_bytes = random.getrandbits(num_random_bytes * 8).to_bytes(num_random_bytes, byteorder='big')
+    hex_str = random_bytes.hex()
+    # Return exact size needed
+    return hex_str[:size_bytes]
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description = 'Generate file with specific size')
     parser.add_argument('-s', '--size',
@@ -65,17 +82,23 @@ if __name__ == '__main__':
     if available_gigabytes <= arguments.size:
         raise Exception('FilesizeExceedsTargetDriveError')
 
-    fs = open(absolute_filepath, 'w')
-
-    loop_counter = 0
-    while True:
-        try:
-            fs.write(gen_hex())
-            if loop_counter % 1000 == 0:
-                if int(os.path.getsize(absolute_filepath)) >= (arguments.size * 1024 * 1024 * 1024):
-                    raise Exception('FilesizeReachedError')
-            loop_counter += 1
-        except Exception as err:
-            fs.close()
-            sys.exit()
+    target_size_bytes = arguments.size * 1024 * 1024 * 1024
+    chunk_size_bytes = 10 * 1024 * 1024  # Write 10MB chunks at a time for better performance
+    
+    with open(absolute_filepath, 'w', buffering=8*1024*1024) as fs:  # 8MB buffer
+        bytes_written = 0
+        
+        while bytes_written < target_size_bytes:
+            # Calculate remaining size to avoid overshooting
+            remaining_bytes = target_size_bytes - bytes_written
+            
+            # Determine how much to write this iteration
+            write_size = min(chunk_size_bytes, remaining_bytes)
+            
+            # Generate and write hex data
+            chunk = gen_hex_chunk(write_size)
+            fs.write(chunk)
+            bytes_written += len(chunk)
+    
+    sys.exit(0)
 
