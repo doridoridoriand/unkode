@@ -6,7 +6,6 @@
 require 'mechanize'
 
 agent                  = Mechanize.new
-agent.log              = Logger.new STDOUT
 agent.user_agent_alias = 'Mac Safari'
 
 page = agent.get('https://www.vim.org/scripts/script_search_results.php?&script_type=color%20scheme&order_by=rating&show_me=1000')
