@@ -18,7 +18,7 @@ spec:
         - name: waste-cpu-resource-container
           image: doridoridoriand/boring_primenumber:2.7.8-0.0.2
           securityContext:
-            runAsNonRoot: true
+            runAsNonRoot: false
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             seccompProfile:
